@@ -1,10 +1,9 @@
 package user.service.dto.alarm.response;
 
-import com.simple.book.domain.alarm.entity.Alarm;
-import com.simple.book.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import user.service.entity.User;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -26,13 +25,13 @@ public class AlarmDto {
 		this.createdAt=createdAt;
 		this.updatedAt=updatedAt;
 	}
-	
-	public Alarm toEntity() {
-		return Alarm.builder()
-				.alarmId(alarmId)
-				.user(user)
-				.message(message)
-				.build();
-	}
-	
+//
+//	public Alarm toEntity() {
+//		return Alarm.builder()
+//				.alarmId(alarmId)
+//				.user(user)
+//				.message(message)
+//				.build();
+//	}
+//
 }

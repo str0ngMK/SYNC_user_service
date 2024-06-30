@@ -1,9 +1,9 @@
 package user.service.global.advice;
 
-import com.simple.book.global.exception.AuthorizationFailureException;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authorization.event.AuthorizationDeniedEvent;
 import org.springframework.stereotype.Component;
+import user.service.global.exception.AuthorizationFailureException;
 
 @Component
 public class AuthenticationEvents {
