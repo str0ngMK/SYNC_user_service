@@ -1,7 +1,5 @@
 package user.service.global.filter;
 
-import com.simple.book.domain.jwt.dto.CustomUserDetails;
-import com.simple.book.domain.oauth2.CustomOAuth2User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.servlet.HandlerInterceptor;
+import user.service.jwt.dto.CustomUserDetails;
+import user.service.oauth2.CustomOAuth2User;
+
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor {
     @Override

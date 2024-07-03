@@ -42,6 +42,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     }
                 }
             }
+            
             if (jwtToken == null) {
                 filterChain.doFilter(request, response);
 
