@@ -56,10 +56,9 @@ dependencies {
 
 	//validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-	//spring kafka
+	
+	//kafka
 	implementation 'org.springframework.kafka:spring-kafka'
-
 }
 
 tasks.named('test') {
