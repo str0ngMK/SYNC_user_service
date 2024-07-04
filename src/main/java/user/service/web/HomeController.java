@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import user.service.UserService;
 import user.service.dto.request.SignupRequestDto;
 
@@ -21,6 +22,8 @@ public class HomeController {
 		userService.signup(signupRequestDto);
 		return ResponseEntity.ok("OK");
 	}
-
-
+	@GetMapping("/user/oauth2/authorization/naver")
+	public RedirectView redirectToNaverOAuth() {
+		return new RedirectView("/oauth2/authorization/naver");
+	}
 }

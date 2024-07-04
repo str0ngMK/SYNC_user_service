@@ -23,6 +23,7 @@ import user.service.global.advice.ResponseMessage;
 import user.service.global.exception.AuthenticationFailureException;
 import user.service.global.exception.IdenticalValuesCannotChangedException;
 import user.service.global.exception.UnknownException;
+import user.service.global.exception.UserIdDuplicatedException;
 import user.service.jwt.dto.AuthTokenDto;
 import user.service.jwt.dto.CustomUserDetails;
 import user.service.oauth2.CustomOAuth2User;
@@ -56,7 +57,6 @@ public class UserService implements UserDetailsService {
 	public User signup(SignupRequestDto signupRequestDto) {
 		boolean isSuccess;
 		long id;
-//		log.info("signup password : " + signupRequestDto.getPassword());
 		Authentication authentication = Authentication.builder().userId(signupRequestDto.getUserId())
 				.email(signupRequestDto.getEmail())
 				.password(bCryptPasswordEncoder.encode(signupRequestDto.getPassword())).infoSet(InfoSet.DEFAULT)
@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
 			authenticationRepository.saveAndFlush(authentication);
 			isSuccess = true;
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("중복된 아이디입니다.", e);
+			throw new UserIdDuplicatedException(e.getMessage());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
