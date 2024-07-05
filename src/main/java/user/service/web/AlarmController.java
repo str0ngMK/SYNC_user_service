@@ -14,7 +14,7 @@ import user.service.kafka.alarm.KafkaAlarmProducerService;
 import user.service.UserService;
 
 @RestController
-@RequestMapping(value = "/api/user/alarm", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/user/api/alarm", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AlarmController {
 	private final KafkaAlarmProducerService alarmService;
@@ -28,7 +28,6 @@ public class AlarmController {
 	@GetMapping("/request/list")
 	public void reqAlarmList() {
 		String loginId = userService.getCurrentUserId();
-		alarmService.getAlarmList(loginId);
 	}
 	
 	

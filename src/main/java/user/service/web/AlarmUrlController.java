@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/user/alarm/url", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/user/api/alarm/url", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AlarmUrlController {
 //	private final AlarmUrlService alarmUrlService;

@@ -18,10 +18,8 @@ import user.service.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class KafkaAlarmProducerService {
-	// kafka
-	private final KafkaTemplate<String, String> kafkaTemplate;
+	private final KafkaTemplate<String, Object> kafkaTemplate;
 	private final KafkaAdmin kafkaAdmin;
-	private final KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory;
 
 	// repository
 	private final UserRepository userRepository;
@@ -29,7 +27,7 @@ public class KafkaAlarmProducerService {
 	// common
 	private final ObjectMapper objectMapper;
 	private final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
-	
+
 	// controller
 
 	public void getAlarmList(String loginId) {

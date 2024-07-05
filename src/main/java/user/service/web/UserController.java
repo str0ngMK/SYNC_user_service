@@ -11,7 +11,7 @@ import user.service.web.dto.request.ModifyUserInfoRequestDto;
 import user.service.global.advice.ResponseMessage;
 
 @RestController
-@RequestMapping("api/user/")
+@RequestMapping("/user/api/")
 @RequiredArgsConstructor
 public class UserController {
 	private final UserService userService;

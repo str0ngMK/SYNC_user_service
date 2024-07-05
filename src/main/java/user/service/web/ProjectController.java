@@ -9,7 +9,7 @@ import user.service.global.advice.ResponseMessage;
 import user.service.kafka.project.KafkaProjectProducerService;
 
 @RestController
-@RequestMapping("api/user/project")
+@RequestMapping("user/api/project")
 @RequiredArgsConstructor
 public class ProjectController {
     private final UserService userService;

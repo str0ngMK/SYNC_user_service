@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import user.service.global.advice.ResponseMessage;
 
 @RestController
-@RequestMapping("api/user/project/task")
+@RequestMapping("user/api/task")
 @RequiredArgsConstructor
 public class TaskController {
 //
