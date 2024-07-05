@@ -1,4 +1,4 @@
-package user.service;
+package user.service.kafka.alarm;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import user.service.web.AlarmController;
 
 @Component
 @RequiredArgsConstructor
-public class AlarmListener {
+public class KafkaAlarmConsumerService {
 	
 	private final AlarmController alarmController;
 	

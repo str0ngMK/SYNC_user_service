@@ -10,14 +10,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import user.service.AlarmService;
+import user.service.kafka.alarm.KafkaAlarmProducerService;
 import user.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/user/alarm", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AlarmController {
-	private final AlarmService alarmService;
+	private final KafkaAlarmProducerService alarmService;
 	private final UserService userService;
 	
 	

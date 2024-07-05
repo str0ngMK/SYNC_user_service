@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import user.service.UserService;
 import user.service.dto.project.request.CreateProjectRequestDto;
 import user.service.global.advice.ResponseMessage;
-import user.service.kafka.KafkaProducerService;
+import user.service.kafka.project.KafkaProjectProducerService;
 
 @RestController
 @RequestMapping("api/user/project")
 @RequiredArgsConstructor
 public class ProjectController {
     private final UserService userService;
-    private final KafkaProducerService kafkaProducerService;
+    private final KafkaProjectProducerService kafkaProducerService;
     @PostMapping("/create")
     public ResponseEntity<ResponseMessage> createProject(@RequestBody CreateProjectRequestDto projectCreateRequestDto) {
         String userId = userService.getCurrentUserId();

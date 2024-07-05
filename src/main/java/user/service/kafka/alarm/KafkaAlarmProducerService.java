@@ -1,4 +1,4 @@
-package user.service;
+package user.service.kafka.alarm;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -17,7 +17,7 @@ import user.service.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class AlarmService {
+public class KafkaAlarmProducerService {
 	// kafka
 	private final KafkaTemplate<String, String> kafkaTemplate;
 	private final KafkaAdmin kafkaAdmin;
