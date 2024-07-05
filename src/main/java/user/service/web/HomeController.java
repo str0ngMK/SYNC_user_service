@@ -23,7 +23,7 @@ public class HomeController {
 		userService.signup(signupRequestDto);
 		return ResponseEntity.ok("OK");
 	}
-	@GetMapping("/user/oauth2/authorization/naver")
+	@PostMapping("/user/oauth2/authorization/naver")
 	public RedirectView redirectToNaverOAuth(HttpServletRequest request) {
 		// 현재 요청의 스키마, 호스트, 포트를 가져옵니다.
 		String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/user";
