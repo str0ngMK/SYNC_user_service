@@ -1,4 +1,4 @@
-package user.service.dto.request;
+package user.service.web.dto.request;
 
 public class LoginRequestDto {
 

@@ -1,4 +1,4 @@
-package user.service.dto.project.response;
+package user.service.web.dto.project.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

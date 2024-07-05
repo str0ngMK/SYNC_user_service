@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class CreateMemberAtProjectEvent {
-    String projectId;
+    Long projectId;
     String userId;
 }

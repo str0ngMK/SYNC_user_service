@@ -3,24 +3,26 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import user.service.UserService;
+import user.service.MemberService;
+import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.kafka.project.event.CreateMemberAtProjectEvent;
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class KafkaProjectConsumerService {
     private static final String TOPIC1 = "member-create-at-project-topic";
-    private final UserService userService;
+    private final MemberService memberService;
     @KafkaListener(topics = TOPIC1, groupId = "project_create_group")
-    public void listenProjectCreateEvent(CreateMemberAtProjectEvent event) {
+    public void listenCreateMemberAtProjectEvent(CreateMemberAtProjectEvent event) {
         try {
-            // JSON 문자열을 CreateMemberAtProjectEvent 객체로 변환
-            String userId = event.getUserId();
-            String projectId = event.getProjectId();
             // 이벤트 처리
-            userService.createMemberAtProject(userId, projectId);
+            MemberMappingToProjectRequestDto memberMappingToProjectRequestDto = MemberMappingToProjectRequestDto.builder()
+                    .userId(event.getUserId())
+                    .projectId(event.getProjectId())
+                    .build();
+            memberService.memberAddToProject(memberMappingToProjectRequestDto);
             // 처리 로그 출력
-            log.info("Processed CreateMemberAtProjectEvent for userId: " + userId);
+            log.info("Processed CreateMemberAtProjectEvent for userId: " + memberMappingToProjectRequestDto.getUserId());
         } catch (Exception e) {
             log.error(e.getMessage());
         }

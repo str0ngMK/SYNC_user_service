@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.service.UserService;
-import user.service.dto.project.request.CreateProjectRequestDto;
+import user.service.web.dto.project.request.CreateProjectRequestDto;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.project.KafkaProjectProducerService;
 

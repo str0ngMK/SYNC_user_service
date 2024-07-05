@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import user.service.UserService;
-import user.service.dto.request.SignupRequestDto;
+import user.service.web.dto.request.SignupRequestDto;
 
 @Controller
 @RequestMapping("/")

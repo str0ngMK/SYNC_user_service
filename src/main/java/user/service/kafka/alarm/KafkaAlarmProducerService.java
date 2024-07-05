@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-import user.service.dto.alarm.request.AlarmListRequestDto;
+import user.service.web.dto.alarm.request.AlarmListRequestDto;
 import user.service.entity.User;
 import user.service.repository.UserRepository;
 

@@ -1,4 +1,4 @@
-package user.service.dto.alarm.request;
+package user.service.web.dto.alarm.request;
 
 import lombok.Data;
 

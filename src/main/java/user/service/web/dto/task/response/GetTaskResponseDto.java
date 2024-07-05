@@ -1,12 +1,10 @@
-package user.service.dto.task.response;
+package user.service.web.dto.task.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.springframework.scheduling.config.Task;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

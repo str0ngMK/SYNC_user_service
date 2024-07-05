@@ -15,9 +15,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "user_id",updatable = false)
     private User user;
-
+    private Long projectId;
+    private Boolean isManager;
 }

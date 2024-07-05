@@ -3,7 +3,7 @@ package user.service.kafka.project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import user.service.dto.project.request.CreateProjectRequestDto;
+import user.service.web.dto.project.request.CreateProjectRequestDto;
 import user.service.kafka.project.event.ProjectCreateEvent;
 
 @Service

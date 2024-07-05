@@ -3,18 +3,12 @@ package user.service.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import user.service.UserService;
-import user.service.dto.request.ModifyPwdRequestDto;
-import user.service.dto.request.ModifyUserInfoRequestDto;
+import user.service.web.dto.request.ModifyPwdRequestDto;
+import user.service.web.dto.request.ModifyUserInfoRequestDto;
 import user.service.global.advice.ResponseMessage;
-import user.service.jwt.dto.CustomUserDetails;
-import user.service.oauth2.CustomOAuth2User;
 
 @RestController
 @RequestMapping("api/user/")

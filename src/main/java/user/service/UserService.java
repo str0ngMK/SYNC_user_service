@@ -11,9 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import user.service.dto.request.ModifyPwdRequestDto;
-import user.service.dto.request.ModifyUserInfoRequestDto;
-import user.service.dto.request.SignupRequestDto;
+import user.service.web.dto.request.ModifyPwdRequestDto;
+import user.service.web.dto.request.ModifyUserInfoRequestDto;
+import user.service.web.dto.request.SignupRequestDto;
 import user.service.entity.Authentication;
 import user.service.entity.InfoSet;
 import user.service.entity.Role;
@@ -171,8 +171,6 @@ public class UserService implements UserDetailsService {
 		}
 		return user;
 	}
-
-
 	/**
 	 * 비밀번호 변경
 	 * 
@@ -215,6 +213,4 @@ public class UserService implements UserDetailsService {
 		return null; // 사용자가 인증되지 않았거나 인증 정보가 없는 경우
 	}
 
-    public void createMemberAtProject(String userId, String projectId) {
-    }
 }

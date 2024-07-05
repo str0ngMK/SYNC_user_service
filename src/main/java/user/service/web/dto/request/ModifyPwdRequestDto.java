@@ -1,4 +1,4 @@
-package user.service.dto.request;
+package user.service.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

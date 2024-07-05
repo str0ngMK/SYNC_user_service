@@ -1,4 +1,4 @@
-package user.service.dto.member.request;
+package user.service.web.dto.member.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

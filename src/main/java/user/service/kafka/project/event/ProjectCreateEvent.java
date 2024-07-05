@@ -1,7 +1,7 @@
 package user.service.kafka.project.event;
 
 import lombok.AllArgsConstructor;
-import user.service.dto.project.request.CreateProjectRequestDto;
+import user.service.web.dto.project.request.CreateProjectRequestDto;
 
 @AllArgsConstructor
 public class ProjectCreateEvent {
