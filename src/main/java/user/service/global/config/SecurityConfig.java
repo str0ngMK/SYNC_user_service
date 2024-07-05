@@ -92,6 +92,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/api/**").hasAnyAuthority("USER")
                         //비로그인 회원은 조회만 가능하도록 설정
                         .anyRequest().permitAll()
+                        .requestMatchers("/user/oauth2/**").permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/naver")
