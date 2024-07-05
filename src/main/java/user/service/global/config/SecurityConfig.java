@@ -90,9 +90,11 @@ public class SecurityConfig {
                         .requestMatchers("/user/admin/api/**").hasAnyAuthority("ADMIN")
                         //유저 기능 api 권한(수정, 등록, 삭제)
                         .requestMatchers("/user/api/**").hasAnyAuthority("USER")
+                        //OAuth2 경로 허용
+                        .requestMatchers("/user/oauth2/**").permitAll()
                         //비로그인 회원은 조회만 가능하도록 설정
                         .anyRequest().permitAll()
-                        .requestMatchers("/user/oauth2/**").permitAll()
+
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/naver")
