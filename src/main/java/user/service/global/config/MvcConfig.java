@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.addPathPrefix("/user", c -> c.isAnnotationPresent(Controller.class));

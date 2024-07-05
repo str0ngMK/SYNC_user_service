@@ -197,12 +197,6 @@ public class UserService implements UserDetailsService {
 		} else {
 			result = ResponseMessage.builder().result(false).message("비밀번호를 확인 해 주세요.").build();
 		}
-// jwt만료시 /user 경로로 접근이 제한되므로 필요 하지 않습니다.
-//		if (userDetails != null) {
-//
-//		} else {
-//			result = ResponseMessage.builder().result(false).message("로그인이 만료 되었습니다.").build();
-//		}
 		return result;
 	}
 
@@ -221,4 +215,6 @@ public class UserService implements UserDetailsService {
 		return null; // 사용자가 인증되지 않았거나 인증 정보가 없는 경우
 	}
 
+    public void createMemberAtProject(String userId, String projectId) {
+    }
 }
