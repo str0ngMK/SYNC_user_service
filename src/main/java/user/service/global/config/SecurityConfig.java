@@ -97,7 +97,7 @@ public class SecurityConfig {
 
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/naver")
+                        .loginPage("/user/oauth2/authorization/naver")
                 );
 
 
