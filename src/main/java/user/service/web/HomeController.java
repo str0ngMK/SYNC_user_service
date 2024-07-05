@@ -24,12 +24,7 @@ public class HomeController {
 		return ResponseEntity.ok("OK");
 	}
 	@PostMapping("/user/oauth2/authorization/naver")
-	public RedirectView redirectToNaverOAuth(HttpServletRequest request) {
-		// 현재 요청의 스키마, 호스트, 포트를 가져옵니다.
-		String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/user";
-		// OAuth 로그인 경로를 포함한 전체 URL을 생성합니다.
-		String redirectUrl = baseUrl + "/oauth2/authorization/naver";
-		// 생성된 URL로 리다이렉트합니다.
-		return new RedirectView(redirectUrl);
+	public String redirectToNaverOAuth() {
+		return "";
 	}
 }
