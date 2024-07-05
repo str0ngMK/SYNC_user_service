@@ -22,30 +22,6 @@ import user.service.oauth2.CustomOAuth2User;
 public class UserController {
 	private final UserService userService;
 	//.requestMatchers("/user").hasAnyAuthority("USER") USER 계정 로그인 필요
-	@GetMapping("auth")
-	public ResponseMessage userApi() {
-		String userId = null;
-		String name = null;
-		String infoset = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.isAuthenticated()) {
-
-			if (authentication instanceof OAuth2AuthenticationToken) {
-				CustomOAuth2User oauthToken = (CustomOAuth2User) authentication.getPrincipal();
-				userId = oauthToken.getUsername(); // OAuth2로 인증된 경우 사용자 ID 추출
-				name = oauthToken.getName();
-				infoset = oauthToken.getInfoSet().toString();
-
-			} else if (authentication instanceof UsernamePasswordAuthenticationToken) {
-				CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-				userId = customUserDetails.getUsername();
-				name = customUserDetails.getName();
-				infoset = customUserDetails.getInfoSet().toString();
-
-			}
-		}
-		return ResponseMessage.builder().build();
-	}
 	
 	@GetMapping("info")
 	public ResponseEntity<ResponseMessage> getUserInfo(){
