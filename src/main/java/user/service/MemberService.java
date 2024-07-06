@@ -3,7 +3,6 @@ package user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,7 +34,7 @@ public class MemberService {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         Boolean isManager = memberMappingToProjectRequestDto.getIsManager();
-
+        //http://129.213.161.199:31585/project/api/v1/find
         String baseUrl = "http://localhost:8070/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", projectId)
@@ -67,15 +66,13 @@ public class MemberService {
         return new ResponseMessage("멤버 추가 성공", true, userIds);
     }
     /**
-     * 멤버 존재 여부 확인
-     * @param MemberId
+     * 프로젝트에 속한 멤버를 조회합니다.
+     * @param projectId, userId
      * @return
      */
     @Transactional(rollbackFor = { Exception.class })
-    public Member findMember(Long MemberId) {
-        Member member = memberRepository.findById(MemberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with ID: " + MemberId));
-        memberRepository.save(member);
-        return member;
+    public void findMemberByUserIdAndProjectId(Long userId, Long projectId) {
+        memberRepository.findMemberByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with UserId: " + userId + " and ProjectId: " + projectId));
     }
 }

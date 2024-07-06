@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.service.global.advice.ResponseMessage;
+import user.service.kafka.task.KafkaTaskProducerService;
+import user.service.web.dto.task.request.CreateTaskRequestDto;
 
 @RestController
 @RequestMapping("user/api/task")
 @RequiredArgsConstructor
 public class TaskController {
-//
-//    @PostMapping("/create")
-//    public ResponseEntity<ResponseMessage> createTask(@RequestBody CreateTaskRequestDto createTaskRequestDto) {
-//        return ResponseEntity.ok().body(taskService.createTask(createTaskRequestDto));
-//    }
+    private final KafkaTaskProducerService kafkaTaskProducerService;
+    @PostMapping("/create")
+    public ResponseMessage createTask(@RequestBody CreateTaskRequestDto createTaskRequestDto) {
+        return kafkaTaskProducerService.sendCreateTaskEvent(createTaskRequestDto);
+    }
 //
 //    //해당 업무의 모든 하위 업무를 조회합니다.
 //    @GetMapping("/getSubTasks")

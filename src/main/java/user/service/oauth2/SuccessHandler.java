@@ -1,5 +1,6 @@
 package user.service.oauth2;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import user.service.global.advice.ResponseMessage;
 import user.service.jwt.util.JWTUtil;
 
 import java.io.IOException;
@@ -38,7 +40,15 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         ResponseCookie jwtCookie = createCookie("JWT_TOKEN",  token);
 
         response.addHeader("Set-Cookie", jwtCookie.toString());
-        response.sendRedirect("http://158.247.197.212/");
+        // ObjectMapper를 사용하여 JSON으로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(ResponseMessage.builder().message("success").build());
+        response.addHeader("Set-Cookie", jwtCookie.toString());
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        // JSON 스트링을 response body에 작성
+        response.getWriter().write(jsonResponse);
+        response.getWriter().flush();
     }
 
     //쿠키로 JWT 발급
