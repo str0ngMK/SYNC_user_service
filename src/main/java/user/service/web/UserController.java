@@ -16,7 +16,6 @@ import user.service.global.advice.ResponseMessage;
 public class UserController {
 	private final UserService userService;
 	//.requestMatchers("/user").hasAnyAuthority("USER") USER 계정 로그인 필요
-	
 	@GetMapping("info")
 	public ResponseEntity<ResponseMessage> getUserInfo(){
 		return ResponseEntity.ok().body(userService.getUserInfo());
