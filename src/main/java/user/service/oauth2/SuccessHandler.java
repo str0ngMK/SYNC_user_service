@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.Iterator;
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
 
@@ -38,8 +40,8 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String token = jwtUtil.createJwt(username, role, 60*30*1000L, infoSet, name);
 
         ResponseCookie jwtCookie = createCookie("JWT_TOKEN",  token);
+        log.info("JWT 발급 완료");
 
-        response.addHeader("Set-Cookie", jwtCookie.toString());
         // ObjectMapper를 사용하여 JSON으로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(ResponseMessage.builder().message("success").build());

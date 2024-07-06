@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,8 +27,6 @@ import user.service.jwt.filter.JWTFilter;
 import user.service.jwt.filter.LoginFilter;
 import user.service.jwt.util.JWTUtil;
 import user.service.oauth2.SuccessHandler;
-import user.service.repository.CustomClientRegistrationRepository;
-
 import java.util.Collections;
 import java.util.List;
 @Configuration
@@ -51,10 +48,7 @@ public class SecurityConfig {
     public JWTFilter JWTFilter() {
         return new JWTFilter(exceptionResolver, jwtUtil);
     }
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new CustomClientRegistrationRepository();
-    }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
