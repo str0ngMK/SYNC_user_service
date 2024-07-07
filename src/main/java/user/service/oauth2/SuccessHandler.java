@@ -37,7 +37,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String role = auth.getAuthority();
 
 
-        String token = jwtUtil.createJwt(username, role, 60*30*1000L, infoSet, name);
+        String token = jwtUtil.createJwt(username, role, 60*30*1000000L, infoSet, name);
 
         ResponseCookie jwtCookie = createCookie("JWT_TOKEN",  token);
         log.info("JWT 발급 완료");
@@ -59,8 +59,8 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 .path("/")
                 .sameSite("None")
                 .httpOnly(false)
-                .secure(true)
-                .maxAge(30 * 60)
+                .secure(false)
+                .maxAge(30 * 600)
                 .build();
         return cookie;
     }
