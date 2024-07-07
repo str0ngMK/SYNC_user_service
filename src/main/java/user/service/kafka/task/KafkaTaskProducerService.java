@@ -23,7 +23,8 @@ public class KafkaTaskProducerService {
     private static final String TOPIC = "task-create-topic";
     public ResponseMessage sendCreateTaskEvent(CreateTaskRequestDto createTaskRequestDto) {
         //http://129.213.161.199:31585/project/api/v1/find
-        String baseUrl = "http://localhost:8070/project/api/v1/find";
+        //http://localhost:8070/project/api/v1/find
+        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", createTaskRequestDto.getProjectId())
                 .toUriString();

@@ -35,7 +35,8 @@ public class MemberService {
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         Boolean isManager = memberMappingToProjectRequestDto.getIsManager();
         //http://129.213.161.199:31585/project/api/v1/find
-        String baseUrl = "http://localhost:8070/project/api/v1/find";
+        //http://localhost:8070/project/api/v1/find
+        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", projectId)
                 .toUriString();
