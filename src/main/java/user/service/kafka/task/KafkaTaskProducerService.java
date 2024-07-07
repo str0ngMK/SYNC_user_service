@@ -29,7 +29,7 @@ public class KafkaTaskProducerService {
                 .queryParam("projectId", createTaskRequestDto.getProjectId())
                 .toUriString();
         ResponseMessage responseMessage = webClient.build()
-                .get()
+                .post()
                 .uri(urlWithQueryParam)
                 .retrieve()
                 .bodyToMono(ResponseMessage.class)

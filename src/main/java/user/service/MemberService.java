@@ -41,7 +41,7 @@ public class MemberService {
                 .queryParam("projectId", projectId)
                 .toUriString();
         ResponseMessage responseMessage = webClient.build()
-                .get()
+                .post()
                 .uri(urlWithQueryParam)
                 .retrieve()
                 .bodyToMono(ResponseMessage.class)
