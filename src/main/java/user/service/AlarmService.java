@@ -1,12 +1,17 @@
 package user.service;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,11 +33,12 @@ public class AlarmService {
 
 	// common
 	private final ObjectMapper objectMapper;
-	private final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+//	private final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+	private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 	
-	// controller
+	private final SimpMessagingTemplate messagingTemplate;
 
-	public void getAlarmList(String loginId) {
+	public void reqAlarmList(String loginId) {
 		AlarmListRequestDto dto = new AlarmListRequestDto();
 		User user = userRepository.findByAuthenticationUserId(loginId);
 		dto.setUserId(user.getId());
@@ -45,6 +51,69 @@ public class AlarmService {
 		}
 		kafkaTemplate.send("reqAlarmList", mapper);
 	}
+	
+	
+	@KafkaListener(topics = "resAlarmList")
+	public void listen(String message, Acknowledgment acknowledgment) {
+		System.out.println("★ Kafka Listener 실행! ★ : " + message);
+		sendMessage(message);
+		acknowledgment.acknowledge();
+	}
+	
+	private void sendMessage(String message) {
+//		emitters.forEach(emitter -> {
+//			try {
+//				emitter.send(message, MediaType.TEXT_PLAIN);
+//			} catch (Exception e) {
+//				emitter.complete();
+//				emitters.remove(emitter);
+//				e.printStackTrace();
+//			}
+//		});
+		messagingTemplate.convertAndSend("/alarm/response/list", ServerSentEvent.builder()
+                .event("message")
+                .data(message)
+                .build());
+	}
+	
+	public SseEmitter resAlarmList(String loginId) {
+		User userId = userRepository.findByAuthenticationUserId(loginId);
+		
+		SseEmitter emitter = new SseEmitter();
+		emitters.add(emitter);
+		
+		emitter.onTimeout(() -> {
+			System.out.println("★ 타임 아웃! ★");
+            try {
+                emitters.remove(emitter);
+                emitter.complete();
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
+        });
+
+        emitter.onCompletion(() -> {
+        	System.out.println("★ 완료! ★");
+            try {
+                emitters.remove(emitter);
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
+        });
+
+        emitter.onError((Throwable ex) -> {
+        	System.out.println("★ 에러! ★");
+            try {
+                emitters.remove(emitter);
+                emitter.complete();
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
+        });
+
+		return emitter;
+	}
+	
 
 //	public Flux<String> getAlarmList() {
 //		return Flux.create(sink -> {

@@ -1,5 +1,6 @@
 package user.service.global.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import user.service.global.advice.ErrorCode;
 
