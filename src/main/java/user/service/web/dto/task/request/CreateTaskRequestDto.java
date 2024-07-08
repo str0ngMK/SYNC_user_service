@@ -21,8 +21,8 @@ public class CreateTaskRequestDto {
     @Schema(description = "업무 시작일")
     private Date startDate;
     @NotBlank(message = "상태는 필수 입력 값 입니다.")
-    @Schema(description = "업무 상태")
-    private Boolean status;
+    @Schema(description = "업무 상태 ( 0: 진행중, 1: 완료, 2: 보류)")
+    private int status;
     @NotBlank(message = "이름은 필수 입력 값 입니다.")
     @Schema(description = "업무 이름")
     private String title;

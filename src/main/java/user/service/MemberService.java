@@ -3,10 +3,13 @@ package user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import user.service.global.exception.InvalidValueException;
+import user.service.global.exception.MemberDuplicateInTaskException;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.entity.Member;
 import user.service.entity.User;
@@ -14,8 +17,13 @@ import user.service.global.advice.ResponseMessage;
 import user.service.global.exception.EntityNotFoundException;
 import user.service.global.exception.MemberDuplicateInProjectException;
 import user.service.repository.MemberRepository;
+import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +44,7 @@ public class MemberService {
         Boolean isManager = memberMappingToProjectRequestDto.getIsManager();
         //http://129.213.161.199:31585/project/api/v1/find
         //http://localhost:8070/project/api/v1/find
-        String baseUrl = "https://129.213.161.199:31585/project/api/v1/find";
+        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", projectId)
                 .toUriString();
@@ -75,5 +83,25 @@ public class MemberService {
     public void findMemberByUserIdAndProjectId(Long userId, Long projectId) {
         memberRepository.findMemberByUserIdAndProjectId(userId, projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with UserId: " + userId + " and ProjectId: " + projectId));
+    }
+    @Transactional(rollbackFor = { Exception.class })
+    public ResponseMessage allMembersInSameProject(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+        List<Long> memberIds = memberMappingToTaskRequestDto.getMemberIds();
+        Set<Long> uniqueProjectIds = memberIds.stream()
+                .map(memberId -> memberRepository.findById(memberId)
+                        .orElseThrow(() -> new EntityNotFoundException("Member not found for ID: " + memberId)))
+                .map(Member::getProjectId)
+                .collect(Collectors.toSet());
+
+        if (uniqueProjectIds.size() == 1) {
+            // 모든 멤버가 같은 프로젝트에 속해 있을 경우
+            List<Long> userIds = memberIds.stream()
+                    .map(memberId -> memberRepository.findById(memberId).get().getUser().getId())
+                    .collect(Collectors.toList());
+            return new ResponseMessage("모든 멤버가 같은 프로젝트에 속해 있습니다.", true, userIds);
+        } else {
+            // 멤버들이 서로 다른 프로젝트에 속해 있을 경우
+            return new ResponseMessage("모든 멤버가 같은 프로젝트에 속해 있지 않습니다.", false, memberIds);
+        }
     }
 }

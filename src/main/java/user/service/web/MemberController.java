@@ -8,20 +8,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import user.service.MemberService;
 import user.service.global.advice.ResponseMessage;
+import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
+import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 
 @RestController
 @RequestMapping("user/api/member")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final KafkaTaskProducerService kafkaTaskProducerService;
     @PostMapping("/project/add")
-    public ResponseEntity<ResponseMessage> memberAddToProject(@RequestBody MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
-        return ResponseEntity.ok().body(memberService.memberAddToProject(memberMappingToProjectRequestDto));
+    public ResponseMessage memberAddToProject(@RequestBody MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
+        return memberService.memberAddToProject(memberMappingToProjectRequestDto);
     }
-//
-//    @PostMapping("/task/add")
-//    public ResponseEntity<ResponseMessage> memberAddToTask(@RequestBody MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
-//        return ResponseEntity.ok().body(memberService.memberAddToTask(memberMappingToTaskRequestDto));
-//    }
+
+    @PostMapping("/task/add")
+    public ResponseMessage userAddToTask(@RequestBody MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+        return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
+    }
 }

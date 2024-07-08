@@ -57,9 +57,9 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private ResponseCookie createCookie(String key, String value) {
         ResponseCookie cookie = ResponseCookie.from(key, value)
             .path("/")
-            .sameSite("None")
+            .sameSite("Lax")
             .httpOnly(false)
-            .secure(true)
+            .secure(false)
             .maxAge(30 * 60)
             .build();
         return cookie;
