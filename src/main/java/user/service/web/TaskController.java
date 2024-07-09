@@ -8,6 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.task.request.CreateTaskRequestDto;
+import user.service.web.dto.task.request.DeleteTaskRequestDto;
 import user.service.web.dto.task.request.GetTaskRequestDto;
 
 @RestController
@@ -19,7 +20,7 @@ public class TaskController {
     public ResponseMessage createTask(@RequestBody CreateTaskRequestDto createTaskRequestDto) {
         return kafkaTaskProducerService.sendCreateTaskEvent(createTaskRequestDto);
     }
-    //해당 업무의 자식 업무만 조회합니다.f
+    //해당 업무의 자식 업무만 조회합니다.
     @GetMapping("api/task/getOnlyChildrenTasks")
     public ResponseMessage getOnlyChildrenTasks(@RequestBody GetTaskRequestDto getTaskRequestDto) {
         String baseUrl = "http://129.213.161.199:31585/tasks/api/v1/getChildren";
@@ -38,9 +39,9 @@ public class TaskController {
         }
         return new ResponseMessage("업무 생성 이벤트 생성", true, responseMessage.getValue());
     }
-//    //해당 업무를 삭제합니다.
-//    @PostMapping("/delete")
-//    public ResponseEntity<ResponseMessage> deleteTask(@RequestBody DeleteTaskRequestDto deleteTaskRequestDto) {
-//        return ResponseEntity.ok().body(taskService.deleteTask(deleteTaskRequestDto));
-//    }
+    //해당 업무를 삭제합니다.
+    @PostMapping("/user/api/task/delete")
+    public ResponseMessage deleteTask(@RequestBody DeleteTaskRequestDto deleteTaskRequestDto) {
+        return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
+    }
 }

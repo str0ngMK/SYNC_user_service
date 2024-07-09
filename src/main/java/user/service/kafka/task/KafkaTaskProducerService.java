@@ -10,9 +10,11 @@ import user.service.UserService;
 import user.service.entity.User;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.event.TaskCreateEvent;
+import user.service.kafka.task.event.TaskDeleteEvent;
 import user.service.kafka.task.event.UserAddToTaskEvent;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 import user.service.web.dto.task.request.CreateTaskRequestDto;
+import user.service.web.dto.task.request.DeleteTaskRequestDto;
 
 import java.util.List;
 
@@ -24,18 +26,27 @@ public class KafkaTaskProducerService {
     private final MemberService memberService;
     private static final String TOPIC = "task-create-topic";
     private static final String TOPIC1 = "task-add-user-topic";
+    private static final String TOPIC2 = "task-delete-topic";
+    /**
+     * 업무 생성 이벤트 생성
+     * @param createTaskRequestDto
+     * @return
+     */
     public ResponseMessage sendCreateTaskEvent(CreateTaskRequestDto createTaskRequestDto) {
-
         User user = userService.findUserEntity(userService.getCurrentUserId());
         // 프로젝트의 멤버인지 확인
         memberService.findMemberByUserIdAndProjectId(user.getId(), createTaskRequestDto.getProjectId());
-
         TaskCreateEvent event = new TaskCreateEvent(createTaskRequestDto);
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
         return new ResponseMessage("업무 생성 이벤트 생성", true, createTaskRequestDto);
     }
+    /**
+     * 업무 담당자 배정 이벤트 생성
+     * @param memberMappingToTaskRequestDto
+     * @return
+     */
     public ResponseMessage sendAddUserToTaskEvent(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         ResponseMessage responseMessage = memberService.allMembersInSameProject(memberMappingToTaskRequestDto);
         if(responseMessage.isResult()){
@@ -49,7 +60,15 @@ public class KafkaTaskProducerService {
         }else{
             return new ResponseMessage(responseMessage.getMessage(), false, responseMessage.getValue());
         }
-
     }
-
+    public ResponseMessage sendDeleteTaskEvent(DeleteTaskRequestDto deleteTaskRequestDto) {
+        User user = userService.findUserEntity(userService.getCurrentUserId());
+        // 프로젝트의 멤버인지 확인
+        memberService.findMemberByUserIdAndProjectId(user.getId(), deleteTaskRequestDto.getProjectId());
+        TaskDeleteEvent event = new TaskDeleteEvent(deleteTaskRequestDto.getTaskId());
+        ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC2, event);
+        record.headers().remove("spring.json.header.types");
+        kafkaTemplate.send(record);
+        return new ResponseMessage("업무 삭제 이벤트 생성", true, deleteTaskRequestDto);
+    }
 }

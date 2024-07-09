@@ -80,10 +80,27 @@ public class MemberService {
      * @return
      */
     @Transactional(rollbackFor = { Exception.class })
-    public void findMemberByUserIdAndProjectId(Long userId, Long projectId) {
-        memberRepository.findMemberByUserIdAndProjectId(userId, projectId)
+    public Member findMemberByUserIdAndProjectId(Long userId, Long projectId) {
+        return memberRepository.findMemberByUserIdAndProjectId(userId, projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with UserId: " + userId + " and ProjectId: " + projectId));
     }
+    /**
+     * 멤버가 관리자인지 확인합니다.
+     * @param memberId
+     * @return
+     */
+    @Transactional(rollbackFor = { Exception.class })
+    public void isManager(Long memberId) {
+        Optional<Member> member = memberRepository.findById(memberId);
+        if (!member.get().getIsManager()) {
+            throw new InvalidValueException("해당 멤버는 관리자가 아닙니다.");
+        }
+    }
+    /**
+     * 모든 멤버가 같은 프로젝트에 소속되어 있는지 확인합니다.
+     * @param memberMappingToTaskRequestDto
+     * @return
+     */
     @Transactional(rollbackFor = { Exception.class })
     public ResponseMessage allMembersInSameProject(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         List<Long> memberIds = memberMappingToTaskRequestDto.getMemberIds();
@@ -103,5 +120,32 @@ public class MemberService {
             // 멤버들이 서로 다른 프로젝트에 속해 있을 경우
             return new ResponseMessage("모든 멤버가 같은 프로젝트에 속해 있지 않습니다.", false, memberIds);
         }
+    }
+    /**
+     * 프로젝트에 속해있는 멤버들을 삭제합니다.
+     * @param projectId
+     * @return
+     */
+    @Transactional(rollbackFor = { Exception.class })
+    public void deleteMembersByProjectId(Long projectId) {
+        List<Member> members = memberRepository.findByProjectId(projectId);
+        memberRepository.deleteAll(members);
+    }
+    /**
+     * 사용자가 속한 프로젝트 ID를 조회합니다.
+     * @param userId
+     * @return
+     */
+    @Transactional(rollbackFor = { Exception.class })
+    public List<Long> getProjectIdsByUserId(Long userId) {
+        return memberRepository.findProjectIdsByUserId(userId);
+    }
+    /**
+     * 프로젝트에 속한 멤버 ID를 조회합니다.
+     * @param projectId
+     * @return
+     */
+    public List<Long> getMemberIdsByProjectId(Long projectId) {
+        return memberRepository.findMemberIdsByProjectId(projectId);
     }
 }

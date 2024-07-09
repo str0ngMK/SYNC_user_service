@@ -14,7 +14,7 @@ public class DeleteTaskRequestDto {
     @Schema(description = "업무 아이디")
     @NotBlank
     private Long taskId;
-    @Schema(description = "프로젝트 아이디")
-    @NotBlank
+    @Schema(description = "삭제할 업무의 프로젝트 아이디")
+    @NotBlank(message = "프로젝트 아이디는 필수 입력 값 입니다.")
     private Long projectId;
 }

@@ -20,6 +20,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "user_id",updatable = false)
     private User user;
+    @Column(name = "project_id")
     private Long projectId;
     private Boolean isManager;
 }

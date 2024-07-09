@@ -231,5 +231,8 @@ public class UserService implements UserDetailsService {
 		}
 		return null; // 사용자가 인증되지 않았거나 인증 정보가 없는 경우
 	}
-
+	public Long getUserEntityId(String userId) {
+		User user = userRepository.findByAuthenticationUserId(userId);
+		return user.getId();
+	}
 }

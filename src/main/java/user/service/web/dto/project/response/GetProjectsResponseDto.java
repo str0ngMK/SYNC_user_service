@@ -12,11 +12,11 @@ public class GetProjectsResponseDto {
     private Long projectId;
     private String title;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     @Schema(description = "user entity의 id를 반환")
     private List<Long> memberIds = new ArrayList<>();
-    public GetProjectsResponseDto(Long projectId, String title, String description, Date startDate, Date endDate, List<Long> memberIds) {
+    public GetProjectsResponseDto(Long projectId, String title, String description, String startDate, String endDate, List<Long> memberIds) {
         this.projectId = projectId;
         this.title = title;
         this.description = description;

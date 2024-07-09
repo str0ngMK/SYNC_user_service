@@ -26,12 +26,12 @@ public class AlarmController {
 
 	private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-	@Operation(summary = "과거 알림 불러오기", description = "데이터베이스에 저장 된 알림 정보를 불러옵니다.")
-	@GetMapping("/request/list")
-	public void reqAlarmList() {
-		String loginId = userService.getCurrentUserId();
-		alarmService.reqAlarmList(loginId);
-	}
+//	@Operation(summary = "과거 알림 불러오기", description = "데이터베이스에 저장 된 알림 정보를 불러옵니다.")
+//	@GetMapping("/request/list")
+//	public void reqAlarmList() {
+//		String loginId = userService.getCurrentUserId();
+//		alarmService.reqAlarmList(loginId);
+//	}
 
 //	@GetMapping(value="/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 //	public Flux<String> resAlarmList() {
@@ -39,11 +39,11 @@ public class AlarmController {
 //		return result;
 //	}
 
-	@GetMapping(value = "/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public SseEmitter resAlarmList() {
-		String loginId = userService.getCurrentUserId();
-		return alarmService.resAlarmList(loginId);
-	}
+//	@GetMapping(value = "/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//	public SseEmitter resAlarmList() {
+//		String loginId = userService.getCurrentUserId();
+//		return alarmService.resAlarmList(loginId);
+//	}
 //	@GetMapping(value = "/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 //	public SseEmitter resAlarmList() {
 //		String loginId = userService.getCurrentUserId();

@@ -6,14 +6,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import user.service.entity.Member;
 import user.service.entity.User;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query("SELECT m FROM Member m WHERE m.user.id = :userId AND m.projectId = :projectId")
     Optional<Member> findMemberByUserIdAndProjectId(@Param("userId") Long userId, @Param("projectId") Long projectId);
-//    @Query("SELECT m.project FROM Member m WHERE m.user.id = :userId")
-//    List<Project> findProjectsByUserId(@Param("userId") Long userId);
-    @Query("SELECT u FROM Member m INNER JOIN m.user u WHERE m.id = :memberId")
-    Optional<User> findUserIdByMemberId(@Param("memberId") long memberId);
+    List<Member> findByProjectId(Long projectId);
+    @Query("SELECT m.projectId FROM Member m WHERE m.user.id = :userId")
+    List<Long> findProjectIdsByUserId(@Param("userId") Long userId);
+    @Query("SELECT m.id FROM Member m WHERE m.projectId = :projectId")
+    List<Long> findMemberIdsByProjectId(@Param("projectId") Long projectId);
 }
