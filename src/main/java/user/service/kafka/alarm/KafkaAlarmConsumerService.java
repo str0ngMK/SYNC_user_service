@@ -12,9 +12,9 @@ public class KafkaAlarmConsumerService {
 	
 	private final AlarmController alarmController;
 	
-	@KafkaListener(topics = "resAlarmList")
-	public void listen(String message) {
-		alarmController.sendMessage(message);
-	}
+//	@KafkaListener(topics = "resAlarmList")
+//	public void listen(String message) {
+//		alarmController.sendMessage(message);
+//	}
 
 }

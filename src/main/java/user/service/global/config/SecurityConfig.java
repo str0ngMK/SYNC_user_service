@@ -116,7 +116,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
                         //프론트와 협의하여 포트번호를 수정할 것
-                        configuration.setAllowedOrigins(List.of("https://localhost:3000", "https://www.sync-team.co.kr", "https://localhost"));
+                        configuration.setAllowedOrigins(List.of("https://localhost:3000", "https://www.sync-team.co.kr", "https://localhost", "http://localhost:8090"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
