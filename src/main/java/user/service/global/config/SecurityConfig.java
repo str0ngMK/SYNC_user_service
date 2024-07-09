@@ -11,7 +11,9 @@ import org.springframework.security.authorization.AuthorizationEventPublisher;
 import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +33,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final OAuth2UserSerivce oauth2UserSerivce;
@@ -84,12 +87,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         //관리자 기능 api 권한
-                        .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/user/admin/api/**").hasAnyAuthority("ADMIN")
                         //유저 기능 api 권한(수정, 등록, 삭제)
-                        .requestMatchers("/api/user/**").hasAnyAuthority("USER")
+                        .requestMatchers("/user/api/**").hasAnyAuthority("USER")
                         //비로그인 회원은 조회만 가능하도록 설정
                         .anyRequest().permitAll()
+
                 );
+
+
+
         //session 설정
         http
                 .sessionManagement(session -> session

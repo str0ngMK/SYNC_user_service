@@ -11,18 +11,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import user.service.dto.request.ModifyPwdRequestDto;
-import user.service.dto.request.ModifyUserInfoRequestDto;
-import user.service.dto.request.SignupRequestDto;
+import user.service.global.exception.*;
+import user.service.web.dto.request.ModifyPwdRequestDto;
+import user.service.web.dto.request.ModifyUserInfoRequestDto;
+import user.service.web.dto.request.SignupRequestDto;
 import user.service.entity.Authentication;
 import user.service.entity.InfoSet;
 import user.service.entity.Role;
 import user.service.entity.User;
 import user.service.global.advice.ErrorCode;
 import user.service.global.advice.ResponseMessage;
-import user.service.global.exception.AuthenticationFailureException;
-import user.service.global.exception.IdenticalValuesCannotChangedException;
-import user.service.global.exception.UnknownException;
 import user.service.jwt.dto.AuthTokenDto;
 import user.service.jwt.dto.CustomUserDetails;
 import user.service.oauth2.CustomOAuth2User;
@@ -31,6 +29,7 @@ import user.service.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +37,23 @@ public class UserService implements UserDetailsService {
 	private final UserRepository userRepository;
 	private final AuthenticationRepository authenticationRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-//	private final AlarmUrlService alarmUrlService;
 
+	/**
+	 * 사용자 존재 여부 확인
+	 * @param userId
+	 * @return User
+	 * @throws UserNotFoundException
+	 */
+	@Transactional(rollbackFor = { Exception.class })
+	public User findUserEntity(String userId) {
+        return Optional.ofNullable(userRepository.findByAuthenticationUserId(userId))
+				.orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+	}
+	/**
+	 * 사용자 삭제
+	 * @param userId
+	 * @return
+	 */
 	@Transactional(rollbackFor = { Exception.class })
 	public ResponseMessage remove(String userId) {
 		try {
@@ -50,13 +64,15 @@ public class UserService implements UserDetailsService {
 		}
 		return ResponseMessage.builder().message("success").build();
 	}
-
-	// 회원가입
+	/**
+	 * 사설 회원가입
+	 * @param signupRequestDto
+	 * @return
+	 */
 	@Transactional(rollbackFor = { Exception.class })
 	public User signup(SignupRequestDto signupRequestDto) {
 		boolean isSuccess;
 		long id;
-//		log.info("signup password : " + signupRequestDto.getPassword());
 		Authentication authentication = Authentication.builder().userId(signupRequestDto.getUserId())
 				.email(signupRequestDto.getEmail())
 				.password(bCryptPasswordEncoder.encode(signupRequestDto.getPassword())).infoSet(InfoSet.DEFAULT)
@@ -65,7 +81,7 @@ public class UserService implements UserDetailsService {
 			authenticationRepository.saveAndFlush(authentication);
 			isSuccess = true;
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("중복된 아이디입니다.", e);
+			throw new UserIdDuplicatedException(e.getMessage());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -87,8 +103,11 @@ public class UserService implements UserDetailsService {
 
 		return user;
 	}
-
-	// 로그인
+	/**
+	 * 사설 로그인
+	 * @param userId
+	 * @return
+	 */
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -171,8 +190,6 @@ public class UserService implements UserDetailsService {
 		}
 		return user;
 	}
-
-
 	/**
 	 * 비밀번호 변경
 	 * 
@@ -197,12 +214,6 @@ public class UserService implements UserDetailsService {
 		} else {
 			result = ResponseMessage.builder().result(false).message("비밀번호를 확인 해 주세요.").build();
 		}
-// jwt만료시 /user 경로로 접근이 제한되므로 필요 하지 않습니다.
-//		if (userDetails != null) {
-//
-//		} else {
-//			result = ResponseMessage.builder().result(false).message("로그인이 만료 되었습니다.").build();
-//		}
 		return result;
 	}
 

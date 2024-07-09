@@ -105,9 +105,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "필수 값을 입력 해 주세요.", "result", false));
     }
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> DataIntegrityViolationException(DataIntegrityViolationException e) {
+    public ResponseEntity<?> DataIntegrityViolationException(UserIdDuplicatedException e) {
         log.error(e.getMessage(),e);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage(), "result", false));
+        final ErrorCode errorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeException(RuntimeException e) {

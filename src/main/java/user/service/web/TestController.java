@@ -1,5 +1,4 @@
 package user.service.web;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +20,16 @@ public class TestController {
     public Mono<ResponseEntity<String>> responseTest() {
         loadBalanceCount += 1;
         log.info("loadBalanceCount : " + loadBalanceCount);
-
+        //to project service
         String url = "http://129.213.161.199:31585/project/api/v1/test";
         return webClientBuilder.build()
-                .get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(response -> {
-                    log.info("Response from external API: " + response);
-                    return ResponseEntity.ok(response + " from user service");
-                });
+            .get()
+            .uri(url)
+            .retrieve()
+            .bodyToMono(String.class)
+            .map(response -> {
+                log.info("Response from external API: " + response);
+                return ResponseEntity.ok(response + " from user service");
+            });
     }
 }
