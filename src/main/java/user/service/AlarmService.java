@@ -1,5 +1,8 @@
 package user.service;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.http.codec.ServerSentEvent;
@@ -9,10 +12,13 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.messaging.converter.CompositeMessageConverter;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -33,9 +39,6 @@ public class AlarmService {
 
 	// common
 	private final ObjectMapper objectMapper;
-//	private final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
-	private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-	
 	private final SimpMessagingTemplate messagingTemplate;
 
 	public void reqAlarmList(String loginId) {
@@ -51,69 +54,68 @@ public class AlarmService {
 		}
 		kafkaTemplate.send("reqAlarmList", mapper);
 	}
-	
-	
+
 	@KafkaListener(topics = "resAlarmList")
 	public void listen(String message, Acknowledgment acknowledgment) {
 		System.out.println("★ Kafka Listener 실행! ★ : " + message);
-		sendMessage(message);
+		
+		Map<String, Object> map = null;
+		try {
+			map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		messagingTemplate.convertAndSend("/response/" + map.get("userId"), message);
+		
 		acknowledgment.acknowledge();
 	}
-	
-	private void sendMessage(String message) {
-//		emitters.forEach(emitter -> {
+
+
+	public SseEmitter resAlarmList(String loginId) {
+		User userId = userRepository.findByAuthenticationUserId(loginId);
+
+		SseEmitter emitter = new SseEmitter();
+//		emitters.put(loginId, emitter);
+//		
+////		if(emitters.get("test") == null) {
+////			
+////		}
+//
+//		emitter.onTimeout(() -> {
+//			System.out.println("★ 타임 아웃! ★");
 //			try {
-//				emitter.send(message, MediaType.TEXT_PLAIN);
-//			} catch (Exception e) {
+////				emitters.remove(emitter);
+//				emitters.remove(loginId);
 //				emitter.complete();
-//				emitters.remove(emitter);
+//			} catch (Exception e) {
 //				e.printStackTrace();
 //			}
 //		});
-		messagingTemplate.convertAndSend("/alarm/response/list", ServerSentEvent.builder()
-                .event("message")
-                .data(message)
-                .build());
-	}
-	
-	public SseEmitter resAlarmList(String loginId) {
-		User userId = userRepository.findByAuthenticationUserId(loginId);
-		
-		SseEmitter emitter = new SseEmitter();
-		emitters.add(emitter);
-		
-		emitter.onTimeout(() -> {
-			System.out.println("★ 타임 아웃! ★");
-            try {
-                emitters.remove(emitter);
-                emitter.complete();
-            } catch (Exception e) {
-            	e.printStackTrace();
-            }
-        });
-
-        emitter.onCompletion(() -> {
-        	System.out.println("★ 완료! ★");
-            try {
-                emitters.remove(emitter);
-            } catch (Exception e) {
-            	e.printStackTrace();
-            }
-        });
-
-        emitter.onError((Throwable ex) -> {
-        	System.out.println("★ 에러! ★");
-            try {
-                emitters.remove(emitter);
-                emitter.complete();
-            } catch (Exception e) {
-            	e.printStackTrace();
-            }
-        });
+//
+//		emitter.onCompletion(() -> {
+//			System.out.println("★ 완료! ★");
+//			try {
+////				emitters.remove(emitter);
+//				emitters.remove(loginId);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
+//
+//		emitter.onError((Throwable ex) -> {
+//			System.out.println("★ 에러! ★");
+//			try {
+////				emitters.remove(emitter);
+//				emitters.remove(loginId);
+//				emitter.complete();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
 
 		return emitter;
 	}
-	
 
 //	public Flux<String> getAlarmList() {
 //		return Flux.create(sink -> {

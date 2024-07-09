@@ -40,14 +40,9 @@ public class AlarmController {
 //	}
 
 	@GetMapping(value = "/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<ServerSentEvent<String>> resAlarmList() {
+	public SseEmitter resAlarmList() {
 		String loginId = userService.getCurrentUserId();
-		return Flux.interval(Duration.ofSeconds(1))
-                .map(sequence -> ServerSentEvent.<String>builder()
-                        .id(String.valueOf(sequence))
-                        .event("ping")
-                        .data("Ping " + sequence)
-                        .build());
+		return alarmService.resAlarmList(loginId);
 	}
 //	@GetMapping(value = "/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 //	public SseEmitter resAlarmList() {
