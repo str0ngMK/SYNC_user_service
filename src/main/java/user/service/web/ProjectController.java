@@ -48,10 +48,9 @@ public class ProjectController {
     }
     @GetMapping("/api/project/get")
     public ResponseMessage getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto) {
-//        String baseUrl = "http://129.213.161.199:31585/tasks/api/v1/getChildren";
         List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(getProjectsRequestDto.getUserId()).getId());
         GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);
-        String baseUrl = "http://129.213.161.199:31585/tasks/api/v1/getChildren";
+        String baseUrl = "http://129.213.161.199:31585/project/api/v1/get";
         List<GetProjectsFromProjectServiceResponseDto> getProjectsResponseDto = webClient.build()
                 .post()
                 .uri(baseUrl)
