@@ -37,7 +37,7 @@ public class TaskController {
         if (!responseMessage.isResult()) {
             return new ResponseMessage("해당 업무는 존재하지 않습니다.", false, getTaskRequestDto.getTaskId());
         }
-        return new ResponseMessage("업무 생성 이벤트 생성", true, responseMessage.getValue());
+        return new ResponseMessage("업무 조회 완료", true, responseMessage.getValue());
     }
     //해당 업무를 삭제합니다.
     @PostMapping("/user/api/task/delete")

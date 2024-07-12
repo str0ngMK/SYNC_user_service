@@ -58,7 +58,6 @@ public class ProjectController {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<GetProjectsFromProjectServiceResponseDto>>() {})
                 .block();
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<GetProjectsResponseDto> responseDtos = getProjectsResponseDto.stream().map(project -> {
             String formattedStartDate = sdf.format(project.getStartDate());
