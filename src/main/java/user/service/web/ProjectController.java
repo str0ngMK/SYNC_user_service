@@ -5,7 +5,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import user.service.MemberService;
 import user.service.UserService;
 import user.service.web.dto.project.request.*;
@@ -13,12 +12,10 @@ import user.service.global.advice.ResponseMessage;
 import user.service.kafka.project.KafkaProjectProducerService;
 import user.service.web.dto.project.response.GetProjectsFromProjectServiceResponseDto;
 import user.service.web.dto.project.response.GetProjectsResponseDto;
-import user.service.web.dto.task.response.GetTaskResponseDto;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("")
 @RequiredArgsConstructor
