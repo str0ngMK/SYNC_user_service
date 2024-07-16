@@ -31,7 +31,7 @@ public class ProjectController {
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 생성 이벤트 생성").build());
     }
 
-    @PostMapping("user/api/project/delete")
+    @DeleteMapping("user/api/project/delete")
     public ResponseEntity<ResponseMessage> deleteProject(@RequestBody DeleteProjectRequestDto projectDeleteRequestDto) {
         String userId = userService.getCurrentUserId();
         kafkaProducerService.sendDeleteProjectEvent(projectDeleteRequestDto, userId);

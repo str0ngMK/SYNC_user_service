@@ -79,7 +79,6 @@ public class ErrorResponse {
             fieldErrors.add(new FieldError(field, value, reason));
             return fieldErrors;
         }
-
         private static List<FieldError> of(final BindingResult bindingResult) {
             final List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
             return fieldErrors.stream()

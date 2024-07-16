@@ -34,9 +34,9 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.modifyUserInfo(body, userId));
 	}
 	
-	@ResponseBody
-	@PostMapping("remove")
-	public ResponseEntity<ResponseMessage> removeUser() {
-		return ResponseEntity.ok().body(userService.remove(userService.getCurrentUserId()));
-	}
+//	@ResponseBody
+//	@DeleteMapping("remove")
+//	public ResponseEntity<ResponseMessage> removeUser() {
+//		return ResponseEntity.ok().body(userService.remove(userService.getCurrentUserId()));
+//	}
 }

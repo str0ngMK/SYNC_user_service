@@ -40,7 +40,7 @@ public class TaskController {
         return new ResponseMessage("업무 조회 완료", true, responseMessage.getValue());
     }
     //해당 업무를 삭제합니다.
-    @PostMapping("/user/api/task/delete")
+    @DeleteMapping("/user/api/task/delete")
     public ResponseMessage deleteTask(@RequestBody DeleteTaskRequestDto deleteTaskRequestDto) {
         return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
     }
