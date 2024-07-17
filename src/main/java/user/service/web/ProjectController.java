@@ -37,7 +37,6 @@ public class ProjectController {
         kafkaProducerService.sendDeleteProjectEvent(projectDeleteRequestDto, userId);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 삭제 이벤트 생성").build());
     }
-    // ProjectController.java 내에 추가
     @PutMapping("/user/api/project/update")
     public ResponseEntity<ResponseMessage> updateProject(@RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
         kafkaProducerService.updateProject(updateProjectRequestDto);

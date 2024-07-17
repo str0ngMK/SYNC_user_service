@@ -7,9 +7,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.KafkaTaskProducerService;
+import user.service.web.dto.project.request.UpdateProjectRequestDto;
 import user.service.web.dto.task.request.CreateTaskRequestDto;
 import user.service.web.dto.task.request.DeleteTaskRequestDto;
 import user.service.web.dto.task.request.GetTaskRequestDto;
+import user.service.web.dto.task.request.UpdateTaskRequestDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,5 +45,10 @@ public class TaskController {
     @DeleteMapping("/user/api/task/delete")
     public ResponseMessage deleteTask(@RequestBody DeleteTaskRequestDto deleteTaskRequestDto) {
         return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
+    }
+    @PutMapping("/user/api/task/update")
+    public ResponseEntity<ResponseMessage> updateTask(@RequestBody UpdateTaskRequestDto updateTaskRequestDto) {
+        //업무 업데이트 이벤트 생성 로직 추가
+        return ResponseEntity.ok().body(ResponseMessage.builder().message("업무 업데이트 이벤트 생성").build());
     }
 }

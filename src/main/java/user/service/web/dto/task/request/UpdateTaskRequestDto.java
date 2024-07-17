@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.Date;
 import java.util.Optional;
-
 @Setter
 @Getter
-@Schema(description = "업무를 생성하기 위한 DTO")
-public class CreateTaskRequestDto {
+@Schema(description = "업무를 수정하기 위한 DTO")
+public class UpdateTaskRequestDto {
     @Schema(description = "업무 내용")
     private String description;
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
