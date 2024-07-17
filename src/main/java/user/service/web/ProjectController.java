@@ -24,25 +24,25 @@ public class ProjectController {
     private final MemberService memberService;
     private final WebClient.Builder webClient;
     private final KafkaProjectProducerService kafkaProducerService;
-    @PostMapping("/user/api/project/create")
+    @PostMapping("/user/api/project")
     public ResponseEntity<ResponseMessage> createProject(@RequestBody CreateProjectRequestDto projectCreateRequestDto) {
         String userId = userService.getCurrentUserId();
         kafkaProducerService.sendCreateProjectEvent(projectCreateRequestDto, userId);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 생성 이벤트 생성").build());
     }
 
-    @DeleteMapping("user/api/project/delete")
+    @DeleteMapping("user/api/project")
     public ResponseEntity<ResponseMessage> deleteProject(@RequestBody DeleteProjectRequestDto projectDeleteRequestDto) {
         String userId = userService.getCurrentUserId();
         kafkaProducerService.sendDeleteProjectEvent(projectDeleteRequestDto, userId);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 삭제 이벤트 생성").build());
     }
-    @PutMapping("/user/api/project/update")
+    @PutMapping("/user/api/project")
     public ResponseEntity<ResponseMessage> updateProject(@RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
         kafkaProducerService.updateProject(updateProjectRequestDto);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 업데이트 이벤트 생성").build());
     }
-    @GetMapping("/api/project/get")
+    @GetMapping("/api/project")
     public ResponseMessage getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto) {
         List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(getProjectsRequestDto.getUserId()).getId());
         GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);

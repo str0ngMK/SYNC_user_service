@@ -21,14 +21,14 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.getUserInfo());
 	}
 	
-	@PutMapping("modify/pwd")
+	@PutMapping("pwd")
 	public ResponseEntity<ResponseMessage> modifyPwd(@Valid @RequestBody ModifyPwdRequestDto body){
 		String userId = userService.getCurrentUserId();
 		UserDetails userDetails = userService.loadUserByUsername(userId);
 		return ResponseEntity.ok().body(userService.modifyPwd(body, userDetails));
 	}
 	
-	@PutMapping("modify/userInfo")
+	@PutMapping("userInfo")
 	public ResponseEntity<ResponseMessage> modifyUserInfo(@RequestBody ModifyUserInfoRequestDto body) {
 		String userId = userService.getCurrentUserId();
 		return ResponseEntity.ok().body(userService.modifyUserInfo(body, userId));
