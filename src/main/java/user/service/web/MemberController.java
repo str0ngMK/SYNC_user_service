@@ -18,12 +18,12 @@ import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 public class MemberController {
     private final MemberService memberService;
     private final KafkaTaskProducerService kafkaTaskProducerService;
-    @PostMapping("/project/add")
+    @PostMapping("/project")
     public ResponseMessage memberAddToProject(@RequestBody MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         return memberService.memberAddToProject(memberMappingToProjectRequestDto);
     }
 
-    @PostMapping("/task/add")
+    @PostMapping("/task")
     public ResponseMessage userAddToTask(@RequestBody MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
     }
