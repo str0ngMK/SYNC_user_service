@@ -47,8 +47,8 @@ public class TaskController {
         return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
     }
     @PutMapping("/user/api/task")
-    public ResponseEntity<ResponseMessage> updateTask(@RequestBody UpdateTaskRequestDto updateTaskRequestDto) {
+    public ResponseMessage updateTask(@RequestBody UpdateTaskRequestDto updateTaskRequestDto) {
         //업무 업데이트 이벤트 생성 로직 추가
-        return ResponseEntity.ok().body(ResponseMessage.builder().message("업무 업데이트 이벤트 생성").build());
+        return kafkaTaskProducerService.sendUpdateTaskEvent(updateTaskRequestDto);
     }
 }

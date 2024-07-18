@@ -2,19 +2,21 @@ package user.service.kafka.task;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import user.service.MemberService;
 import user.service.UserService;
 import user.service.entity.User;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.event.TaskCreateEvent;
 import user.service.kafka.task.event.TaskDeleteEvent;
+import user.service.kafka.task.event.TaskUpdateEvent;
 import user.service.kafka.task.event.UserAddToTaskEvent;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 import user.service.web.dto.task.request.CreateTaskRequestDto;
 import user.service.web.dto.task.request.DeleteTaskRequestDto;
+import user.service.web.dto.task.request.UpdateTaskRequestDto;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class KafkaTaskProducerService {
     private static final String TOPIC = "task-create-topic";
     private static final String TOPIC1 = "task-add-user-topic";
     private static final String TOPIC2 = "task-delete-topic";
+    private static final String TOPIC3 = "task-update-topic";
     /**
      * 업무 생성 이벤트 생성
      * @param createTaskRequestDto
@@ -70,5 +73,15 @@ public class KafkaTaskProducerService {
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
         return new ResponseMessage("업무 삭제 이벤트 생성", true, deleteTaskRequestDto);
+    }
+
+    public ResponseMessage sendUpdateTaskEvent(UpdateTaskRequestDto updateTaskRequestDto) {
+        User user = userService.findUserEntity(userService.getCurrentUserId());
+        memberService.findMemberByUserIdAndProjectId(user.getId(), updateTaskRequestDto.getProjectId());
+        TaskUpdateEvent event = new TaskUpdateEvent(updateTaskRequestDto);
+        ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC3, event);
+        record.headers().remove("spring.json.header.types");
+        kafkaTemplate.send(record);
+        return new ResponseMessage("업무 삭제 이벤트 생성", true, updateTaskRequestDto);
     }
 }
