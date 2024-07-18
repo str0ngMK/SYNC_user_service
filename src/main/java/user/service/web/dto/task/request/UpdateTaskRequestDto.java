@@ -28,7 +28,10 @@ public class UpdateTaskRequestDto {
     private String title;
     @Schema(description = "상위 업무 아이디, null == 프로젝트 최상위 업무")
     private Optional<Long> parentTaskId;
-    @Schema(description = "생성할 업무의 프로젝트 아이디")
+    @Schema(description = "수정할 업무의 프로젝트 아이디")
     @NotBlank(message = "프로젝트 아이디는 필수 입력 값 입니다.")
     private Long projectId;
+    @Schema(description = "수정할 업무의 아이디")
+    @NotBlank(message = "업무 아이디는 필수 입력 값 입니다.")
+    private Long taskId;
 }
