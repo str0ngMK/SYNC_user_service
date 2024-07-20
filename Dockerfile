@@ -17,5 +17,5 @@ EXPOSE 8090
 # 디버그 포트 추가
 EXPOSE 5005
 
-# 컨테이너 시작 시 실행할 명령어
-CMD ["./gradlew", "bootRun"]
+# 컨테이너 시작 시 실행할 명령어 (디버그 옵션 추가)
+CMD ["./gradlew", "bootRun", "-Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005"]
