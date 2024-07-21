@@ -30,7 +30,6 @@ public class KafkaProjectProducerService {
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
     }
-
     public void sendDeleteProjectEvent(DeleteProjectRequestDto projectDeleteRequestDto, String userId) {
         ProjectDeleteEvent event = new ProjectDeleteEvent(projectDeleteRequestDto.getProjectId(), userId);
         //프로젝트 관리자인지 확인
@@ -47,7 +46,6 @@ public class KafkaProjectProducerService {
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
     }
-
     public void updateProject(UpdateProjectRequestDto updateProjectRequestDto) {
         ProjectUpdateEvent event = new ProjectUpdateEvent(updateProjectRequestDto);
         //프로젝트 관리자인지 확인
