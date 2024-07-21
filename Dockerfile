@@ -1,6 +1,6 @@
 FROM openjdk:17-slim
 
-
+ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6006"
 WORKDIR /app
 
 # 현재 디렉토리의 모든 파일을 컨테이너의 /app 디렉토리에 복사
