@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "member", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"projectId", "user_id"})
+        @UniqueConstraint(columnNames = {"project_id", "user_id"})
 })
 public class Member {
     @Id
