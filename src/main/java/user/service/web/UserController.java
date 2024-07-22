@@ -28,7 +28,7 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.modifyPwd(body, userDetails));
 	}
 	
-	@PutMapping("userInfo")
+	@PutMapping("Info")
 	public ResponseEntity<ResponseMessage> modifyUserInfo(@RequestBody ModifyUserInfoRequestDto body) {
 		String userId = userService.getCurrentUserId();
 		return ResponseEntity.ok().body(userService.modifyUserInfo(body, userId));
