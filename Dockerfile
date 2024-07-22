@@ -2,7 +2,10 @@
 FROM openjdk:17-slim
 
 WORKDIR /app
-
+# unzip 패키지 설치
+RUN apt-get update && \
+    apt-get install -y unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Gradle 배포판 압축 해제 (/opt/docker/properties 경로 변경)
 RUN unzip /gradle-8.8-bin.zip -d /gradle && \
