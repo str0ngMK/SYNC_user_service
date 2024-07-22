@@ -31,28 +31,36 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
         try {
-            //request에서 Authorization 헤더를 찾음
-            Cookie[] cookies = request.getCookies();
-            String jwtToken = null;
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("JWT_TOKEN".equals(cookie.getName())) {
-                        jwtToken = cookie.getValue();
-                        break;
-                    }
-                }
-            }
-            
-            if (jwtToken == null) {
+//            //request에서 Authorization 헤더를 찾음
+//            Cookie[] cookies = request.getCookies();
+//            String jwtToken = null;
+//            if (cookies != null) {
+//                for (Cookie cookie : cookies) {
+//                    if ("JWT_TOKEN".equals(cookie.getName())) {
+//                        jwtToken = cookie.getValue();
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            if (jwtToken == null) {
+//                filterChain.doFilter(request, response);
+//
+//                //조건이 해당되면 메소드 종료 (필수)
+//                return;
+//            }
+//
+//            //Bearer 부분 제거 후 순수 토큰만 획득
+//            String token = jwtToken;
+            // Authorization 헤더에서 토큰을 읽음
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
                 filterChain.doFilter(request, response);
-
-                //조건이 해당되면 메소드 종료 (필수)
                 return;
             }
 
-            //Bearer 부분 제거 후 순수 토큰만 획득
-            String token = jwtToken;
-
+            // Bearer 부분을 제거하고 순수한 토큰만 획득
+            String token = authorizationHeader.substring(7);
             //토큰 소멸 시간 검증
             if (jwtUtil.isExpired(token)) {
 

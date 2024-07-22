@@ -63,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
         String token = jwtUtil.createJwt(username, role, 60*30*1000L, infoSet, name);
-        ResponseCookie jwtCookie = createCookie("JWT_TOKEN",  token);
+        response.setHeader("Authorization", "Bearer " + token);
 
         // JSON 객체 생성
         UserResponse userResponse = new UserResponse(username, name);
@@ -71,8 +71,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // ObjectMapper를 사용하여 JSON으로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(ResponseMessage.builder().message("success").build());
-        response.addHeader("Set-Cookie", jwtCookie.toString());
-        response.setContentType("text/plain");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         // JSON 스트링을 response body에 작성
         response.getWriter().write(jsonResponse);

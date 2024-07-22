@@ -39,13 +39,12 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         String token = jwtUtil.createJwt(username, role, 60*30*1000L, infoSet, name);
 
-        ResponseCookie jwtCookie = createCookie("JWT_TOKEN",  token);
-        log.info("JWT 발급 완료");
+        response.setHeader("Authorization", "Bearer " + token);
+
 
         // ObjectMapper를 사용하여 JSON으로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(ResponseMessage.builder().message("success").build());
-        response.addHeader("Set-Cookie", jwtCookie.toString());
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         // JSON 스트링을 response body에 작성
