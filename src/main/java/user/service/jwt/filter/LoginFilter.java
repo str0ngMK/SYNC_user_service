@@ -87,7 +87,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private ResponseCookie createCookie(String key, String value) {
         ResponseCookie cookie = ResponseCookie.from(key, value)
                 .path("/")
-                .sameSite("Lax")
+                .sameSite("None")
                 .httpOnly(false)
                 .secure(false)
                 .maxAge(30*60)
