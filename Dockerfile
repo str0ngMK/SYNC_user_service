@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Assuming the JAR file is named your-application.jar and is located in the build/libs directory
 # Ensure the JAR file is built and available before building the Docker image
-COPY build/libs/your-application.jar /app/
+COPY build/libs/SYNC_user_service-0.0.1-SNAPSHOT.jar /app/
 
 # 애플리케이션이 사용할 포트
 EXPOSE 8090
