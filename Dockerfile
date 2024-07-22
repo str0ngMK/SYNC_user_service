@@ -4,12 +4,12 @@ FROM openjdk:17-slim
 WORKDIR /app
 
 
-# 환경 변수 설정
-ENV GRADLE_HOME=/gradle-8.8
-ENV PATH=$PATH:$GRADLE_HOME/bin
 
 # 프로젝트 파일 복사
 COPY . /app
+# 환경 변수 설정
+ENV GRADLE_HOME=/app/gradle-8.8
+ENV PATH=$PATH:$GRADLE_HOME/bin
 
 # gradlew 실행 권한 추가
 RUN chmod +x ./gradlew
