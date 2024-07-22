@@ -22,4 +22,4 @@ EXPOSE 8090
 EXPOSE 5005
 
 # 컨테이너 시작 시 실행할 명령어
-CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "./build/libs/your-application.jar"]
+CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "./build/libs/SYNC_user_service-0.0.1-SNAPSHOT.jar"]
