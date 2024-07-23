@@ -8,10 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.project.request.UpdateProjectRequestDto;
-import user.service.web.dto.task.request.CreateTaskRequestDto;
-import user.service.web.dto.task.request.DeleteTaskRequestDto;
-import user.service.web.dto.task.request.GetTaskRequestDto;
-import user.service.web.dto.task.request.UpdateTaskRequestDto;
+import user.service.web.dto.task.request.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class TaskController {
     //해당 업무의 자식 업무만 조회합니다.
     @GetMapping("api/task/OnlyChildrenTasks")
     public ResponseMessage getOnlyChildrenTasks(@RequestBody GetTaskRequestDto getTaskRequestDto) {
-        String baseUrl = "http://129.213.161.199:31585/project/tasks/api/v1/getChildren";
+        String baseUrl = "http://129.213.161.199:30080/project/tasks/api/v1/getChildren";
 //        String baseUrl = "http://localhost:8070/tasks/api/v1/getChildren";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("taskId", getTaskRequestDto.getTaskId())
@@ -50,5 +47,8 @@ public class TaskController {
     public ResponseMessage updateTask(@RequestBody UpdateTaskRequestDto updateTaskRequestDto) {
         //업무 업데이트 이벤트 생성 로직 추가
         return kafkaTaskProducerService.sendUpdateTaskEvent(updateTaskRequestDto);
+    }
+    @GetMapping("task/user")
+    public void getMemberFromTask(@RequestBody GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
     }
 }

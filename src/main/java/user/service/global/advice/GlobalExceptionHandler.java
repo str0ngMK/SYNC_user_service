@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "필수 값을 입력 해 주세요.", "result", false));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage(), "result", false));
     }
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> DataIntegrityViolationException(UserIdDuplicatedException e) {

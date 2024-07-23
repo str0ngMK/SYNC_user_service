@@ -14,7 +14,7 @@ import java.util.List;
 public class MemberMappingToProjectRequestDto {
     @Schema(description = "유저 로그인 아이디")
     private List<String> userIds;
-    @Schema(description = "프로젝트 아이디")
+    @Schema(description = "프로젝트 아이디, 해당 프로젝트가 존재하는지 확인하세요")
     private Long projectId;
     @Schema(description = "해당 유저의 관리자 지정 여부")
     private Boolean isManager;

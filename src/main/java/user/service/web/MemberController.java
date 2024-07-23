@@ -23,8 +23,5 @@ public class MemberController {
     public ResponseMessage memberAddToTask(@RequestBody MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
     }
-//    @GetMapping("user/api/member/task")
-//    public ResponseMessage getMemberFromTask(@RequestBody GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
-//        return kafkaTaskProducerService.sendAddUserToTaskEvent(getMemberFromTaskRequestDto);
-//    }
+
 }
