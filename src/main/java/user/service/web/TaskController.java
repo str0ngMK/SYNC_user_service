@@ -22,7 +22,7 @@ public class TaskController {
     //해당 업무의 자식 업무만 조회합니다.
     @GetMapping("api/task/OnlyChildrenTasks")
     public ResponseMessage getOnlyChildrenTasks(@RequestBody GetTaskRequestDto getTaskRequestDto) {
-        String baseUrl = "http://129.213.161.199:30080/project/tasks/api/v1/getChildren";
+        String baseUrl = "https://129.213.161.199:32308/project/tasks/api/v1/getChildren";
 //        String baseUrl = "http://localhost:8070/tasks/api/v1/getChildren";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("taskId", getTaskRequestDto.getTaskId())

@@ -1,15 +1,12 @@
 package user.service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.exception.InvalidValueException;
-import user.service.global.exception.MemberDuplicateInTaskException;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.entity.Member;
 import user.service.entity.User;
@@ -18,9 +15,7 @@ import user.service.global.exception.EntityNotFoundException;
 import user.service.global.exception.MemberDuplicateInProjectException;
 import user.service.repository.MemberRepository;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,7 +38,7 @@ public class MemberService {
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         Boolean isManager = memberMappingToProjectRequestDto.getIsManager();
         //http://localhost:8070/project/api/v1/find
-        String baseUrl = "http://129.213.161.199:30080/project/api/v1/find";
+        String baseUrl = "https://129.213.161.199:32308/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", projectId)
                 .toUriString();
