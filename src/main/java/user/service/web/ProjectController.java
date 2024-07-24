@@ -46,7 +46,7 @@ public class ProjectController {
     public ResponseMessage getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto) {
         List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(getProjectsRequestDto.getUserId()).getId());
         GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);
-        String baseUrl = "https://129.213.161.199:32308/project/api/v1/get";
+        String baseUrl = "http://129.213.161.199:31585/project/api/v1/get";
         List<GetProjectsFromProjectServiceResponseDto> getProjectsResponseDto = webClient.build()
                 .post()
                 .uri(baseUrl)
