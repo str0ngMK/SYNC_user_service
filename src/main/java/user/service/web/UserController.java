@@ -29,7 +29,7 @@ public class UserController {
 	}
 	
 	@PutMapping("Info")
-	public ResponseEntity<ResponseMessage> modifyUserInfo(@RequestBody ModifyUserInfoRequestDto body) {
+	public ResponseEntity<ResponseMessage> modifyUserInfo(@RequestBody @Valid ModifyUserInfoRequestDto body) {
 		String userId = userService.getCurrentUserId();
 		return ResponseEntity.ok().body(userService.modifyUserInfo(body, userId));
 	}

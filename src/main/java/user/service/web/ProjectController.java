@@ -1,5 +1,6 @@
 package user.service.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -25,20 +26,20 @@ public class ProjectController {
     private final WebClient.Builder webClient;
     private final KafkaProjectProducerService kafkaProducerService;
     @PostMapping("/user/api/project")
-    public ResponseEntity<ResponseMessage> createProject(@RequestBody CreateProjectRequestDto projectCreateRequestDto) {
+    public ResponseEntity<ResponseMessage> createProject(@RequestBody @Valid CreateProjectRequestDto projectCreateRequestDto) {
         String userId = userService.getCurrentUserId();
         kafkaProducerService.sendCreateProjectEvent(projectCreateRequestDto, userId);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 생성 이벤트 생성").build());
     }
 
     @DeleteMapping("user/api/project")
-    public ResponseEntity<ResponseMessage> deleteProject(@RequestBody DeleteProjectRequestDto projectDeleteRequestDto) {
+    public ResponseEntity<ResponseMessage> deleteProject(@RequestBody @Valid DeleteProjectRequestDto projectDeleteRequestDto) {
         String userId = userService.getCurrentUserId();
         kafkaProducerService.sendDeleteProjectEvent(projectDeleteRequestDto, userId);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 삭제 이벤트 생성").build());
     }
     @PutMapping("/user/api/project")
-    public ResponseEntity<ResponseMessage> updateProject(@RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
+    public ResponseEntity<ResponseMessage> updateProject(@RequestBody @Valid UpdateProjectRequestDto updateProjectRequestDto) {
         kafkaProducerService.updateProject(updateProjectRequestDto);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 업데이트 이벤트 생성").build());
     }

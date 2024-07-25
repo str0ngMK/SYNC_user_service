@@ -1,5 +1,6 @@
 package user.service.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ public class TaskController {
     private final KafkaTaskProducerService kafkaTaskProducerService;
     private final WebClient.Builder webClient;
     @PostMapping("/user/api/task")
-    public ResponseMessage createTask(@RequestBody CreateTaskRequestDto createTaskRequestDto) {
+    public ResponseMessage createTask(@RequestBody @Valid CreateTaskRequestDto createTaskRequestDto) {
         return kafkaTaskProducerService.sendCreateTaskEvent(createTaskRequestDto);
     }
     //해당 업무의 자식 업무만 조회합니다.
     @GetMapping("api/task/OnlyChildrenTasks")
-    public ResponseMessage getOnlyChildrenTasks(@RequestBody GetTaskRequestDto getTaskRequestDto) {
+    public ResponseMessage getOnlyChildrenTasks(@RequestBody @Valid GetTaskRequestDto getTaskRequestDto) {
         String baseUrl = "http://129.213.161.199:31585/project/tasks/api/v1/getChildren";
 //        String baseUrl = "http://localhost:8070/tasks/api/v1/getChildren";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -40,15 +41,15 @@ public class TaskController {
     }
     //해당 업무를 삭제합니다.
     @DeleteMapping("/user/api/task")
-    public ResponseMessage deleteTask(@RequestBody DeleteTaskRequestDto deleteTaskRequestDto) {
+    public ResponseMessage deleteTask(@RequestBody @Valid DeleteTaskRequestDto deleteTaskRequestDto) {
         return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
     }
     @PutMapping("/user/api/task")
-    public ResponseMessage updateTask(@RequestBody UpdateTaskRequestDto updateTaskRequestDto) {
+    public ResponseMessage updateTask(@RequestBody @Valid UpdateTaskRequestDto updateTaskRequestDto) {
         //업무 업데이트 이벤트 생성 로직 추가
         return kafkaTaskProducerService.sendUpdateTaskEvent(updateTaskRequestDto);
     }
-    @GetMapping("task/user")
-    public void getMemberFromTask(@RequestBody GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
+    @GetMapping("/project/task/member")
+    public void getMemberFromTask(@RequestBody @Valid GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
     }
 }

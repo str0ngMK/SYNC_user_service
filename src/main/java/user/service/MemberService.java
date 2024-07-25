@@ -36,7 +36,7 @@ public class MemberService {
     public ResponseMessage memberAddToProject(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
-        Boolean isManager = memberMappingToProjectRequestDto.getIsManager();
+        int isManager = memberMappingToProjectRequestDto.getIsManager();
         //http://localhost:8070/project/api/v1/find
         String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -86,7 +86,7 @@ public class MemberService {
     @Transactional(rollbackFor = { Exception.class })
     public void isManager(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
-        if (!member.get().getIsManager()) {
+        if (member.get().getIsManager() != 1 && member.get().getIsManager() != 2) {
             throw new InvalidValueException("해당 멤버는 관리자가 아닙니다.");
         }
     }
