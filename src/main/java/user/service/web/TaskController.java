@@ -1,5 +1,6 @@
 package user.service.web;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,8 @@ public class TaskController {
         //업무 업데이트 이벤트 생성 로직 추가
         return kafkaTaskProducerService.sendUpdateTaskEvent(updateTaskRequestDto);
     }
-    @GetMapping("/project/task/member")
+    @Operation(summary = "업무의 담당자들을 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")
+    @GetMapping("/project/task/api/v1/users")
     public void getMemberFromTask(@RequestBody @Valid GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
     }
 }

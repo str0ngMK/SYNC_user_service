@@ -1,5 +1,7 @@
 package user.service.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -43,25 +45,26 @@ public class ProjectController {
         kafkaProducerService.updateProject(updateProjectRequestDto);
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 업데이트 이벤트 생성").build());
     }
-    @GetMapping("/api/project")
-    public ResponseMessage getProjects(@RequestParam String userId) {
-        List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(userId).getId());
-        GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);
-        String baseUrl = "http://129.213.161.199:31585/project/api/v1/get";
-        List<GetProjectsFromProjectServiceResponseDto> getProjectsResponseDto = webClient.build()
-                .post()
-                .uri(baseUrl)
-                .bodyValue(requestDto)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<GetProjectsFromProjectServiceResponseDto>>() {})
-                .block();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<GetProjectsResponseDto> responseDtos = getProjectsResponseDto.stream().map(project -> {
-            String formattedStartDate = sdf.format(project.getStartDate());
-            String formattedEndDate = sdf.format(project.getEndDate());
-            List<Long> memberIds = memberService.getMemberIdsByProjectId(project.getProjectId());
-            return new GetProjectsResponseDto(project.getProjectId(), project.getTitle(), project.getDescription(), formattedStartDate, formattedEndDate, memberIds);
-        }).collect(Collectors.toList());
-        return new ResponseMessage("프로젝트 조회 완료", true, responseDtos);
+    @Operation(summary = "프로젝트를 정보를 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")
+    @GetMapping("/project/api")
+    public void getProjects(@Parameter(description = "존재하지 않는 프로젝트 아이디 입력시 오류 발생") @RequestParam List<Long> projectIds) {
+//        List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(userId).getId());
+//        GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);
+//        String baseUrl = "http://129.213.161.199:31585/project/api/v1/get";
+//        List<GetProjectsFromProjectServiceResponseDto> getProjectsResponseDto = webClient.build()
+//                .post()
+//                .uri(baseUrl)
+//                .bodyValue(requestDto)
+//                .retrieve()
+//                .bodyToMono(new ParameterizedTypeReference<List<GetProjectsFromProjectServiceResponseDto>>() {})
+//                .block();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        List<GetProjectsResponseDto> responseDtos = getProjectsResponseDto.stream().map(project -> {
+//            String formattedStartDate = sdf.format(project.getStartDate());
+//            String formattedEndDate = sdf.format(project.getEndDate());
+//            List<Long> memberIds = memberService.getMemberIdsByProjectId(project.getProjectId());
+//            return new GetProjectsResponseDto(project.getProjectId(), project.getTitle(), project.getDescription(), formattedStartDate, formattedEndDate, memberIds);
+//        }).collect(Collectors.toList());
+//        return new ResponseMessage("프로젝트 조회 완료", true, responseDtos);
     }
 }

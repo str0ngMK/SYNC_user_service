@@ -7,5 +7,5 @@ import user.service.web.dto.project.request.UpdateProjectRequestDto;
 @AllArgsConstructor
 @Getter
 public class ProjectUpdateEvent {
-    private UpdateProjectRequestDto projectUpdateRequestDto;
+    private final UpdateProjectRequestDto projectUpdateRequestDto;
 }

@@ -19,6 +19,7 @@ public class KafkaMemberConsumerService {
     @KafkaListener(topics = TOPIC, groupId = "project_create_group", containerFactory = "kafkaSendAddMemberToProjectEventListenerContainerFactory")
     public void listenAddMemberToProjectEvent(UserAddToProjectEvent event) {
         try {
+            log.warn(String.valueOf(event.getProjectId()));
             MemberMappingToProjectRequestDto memberMappingToProjectRequestDto = MemberMappingToProjectRequestDto.builder()
                     .projectId(event.getProjectId())
                     .userIds(List.of(event.getUserId()))
