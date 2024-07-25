@@ -11,6 +11,9 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import user.service.kafka.project.event.ProjectDeleteEvent;
+import user.service.kafka.project.event.UserAddToProjectEvent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +22,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 	private final ApplicationConfig applicationConfig;
 	@Bean
-	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
+	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaSendAddMemberToProjectEventListenerContainerFactory() {
 		Map<String, Object> consumerProps = new HashMap<>();
 		consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, applicationConfig.getKafkaHost());
 		consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
@@ -27,7 +30,7 @@ public class KafkaConsumerConfig {
 		consumerProps.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
 		consumerProps.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
 		consumerProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-
+		consumerProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, UserAddToProjectEvent.class.getName());
 
 		ConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
 

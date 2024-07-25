@@ -68,6 +68,27 @@ public class MemberService {
         });
         return new ResponseMessage("멤버 추가 성공", true, userIds);
     }
+    @Transactional(rollbackFor = { Exception.class })
+    public ResponseMessage memberAddToProjectNotValidEntity(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
+        List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
+        Long projectId = memberMappingToProjectRequestDto.getProjectId();
+        int isManager = memberMappingToProjectRequestDto.getIsManager();
+
+        userIds.forEach(userId -> {
+            try {
+                User user = userService.findUserEntity(userId);
+                Member member = Member.builder()
+                        .isManager(isManager)
+                        .projectId(projectId)
+                        .user(user)
+                        .build();
+                memberRepository.save(member);
+            } catch (DataIntegrityViolationException e) {
+                throw new MemberDuplicateInProjectException(e.getMessage());
+            }
+        });
+        return new ResponseMessage("멤버 추가 성공", true, userIds);
+    }
     /**
      * 프로젝트에 속한 멤버를 조회합니다.
      * @param projectId, userId
