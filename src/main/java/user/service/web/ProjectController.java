@@ -43,8 +43,8 @@ public class ProjectController {
         return ResponseEntity.ok().body(ResponseMessage.builder().message("프로젝트 업데이트 이벤트 생성").build());
     }
     @GetMapping("/api/project")
-    public ResponseMessage getProjects(@RequestBody GetProjectsRequestDto getProjectsRequestDto) {
-        List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(getProjectsRequestDto.getUserId()).getId());
+    public ResponseMessage getProjects(@RequestParam String userId) {
+        List<Long> projectIds = memberService.getProjectIdsByUserId(userService.findUserEntity(userId).getId());
         GetProjectsRequestToProjectServiceDto requestDto = new GetProjectsRequestToProjectServiceDto(projectIds);
         String baseUrl = "http://129.213.161.199:31585/project/api/v1/get";
         List<GetProjectsFromProjectServiceResponseDto> getProjectsResponseDto = webClient.build()
