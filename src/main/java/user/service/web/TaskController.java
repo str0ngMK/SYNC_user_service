@@ -17,41 +17,42 @@ import user.service.web.dto.task.request.*;
 public class TaskController {
     private final KafkaTaskProducerService kafkaTaskProducerService;
     private final WebClient.Builder webClient;
+    @Operation(summary = "업무를 생성하기 위한 API", description = "HOST = 150.136.153.235:30080 <br>" +
+            "ValidationDetails : CreateTaskRequestDto")
     @PostMapping("/user/api/task")
     public ResponseMessage createTask(@RequestBody @Valid CreateTaskRequestDto createTaskRequestDto) {
         return kafkaTaskProducerService.sendCreateTaskEvent(createTaskRequestDto);
     }
     //해당 업무의 자식 업무만 조회합니다.
-    @GetMapping("api/task/OnlyChildrenTasks")
-    public ResponseMessage getOnlyChildrenTasks(@RequestBody @Valid GetTaskRequestDto getTaskRequestDto) {
-        String baseUrl = "http://129.213.161.199:31585/project/tasks/api/v1/getChildren";
-//        String baseUrl = "http://localhost:8070/tasks/api/v1/getChildren";
-        String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam("taskId", getTaskRequestDto.getTaskId())
-                .toUriString();
-        ResponseMessage responseMessage = webClient.build()
-                .get()
-                .uri(urlWithQueryParam)
-                .retrieve()
-                .bodyToMono(ResponseMessage.class)
-                .block();
-        if (!responseMessage.isResult()) {
-            return new ResponseMessage("해당 업무는 존재하지 않습니다.", false, getTaskRequestDto.getTaskId());
-        }
-        return new ResponseMessage("업무 조회 완료", true, responseMessage.getValue());
-    }
+//    @GetMapping("api/task/OnlyChildrenTasks")
+//    public ResponseMessage getOnlyChildrenTasks(@RequestBody @Valid GetTaskRequestDto getTaskRequestDto) {
+//        String baseUrl = "http://129.213.161.199:31585/project/tasks/api/v1/getChildren";
+//        String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
+//                .queryParam("taskId", getTaskRequestDto.getTaskId())
+//                .toUriString();
+//        ResponseMessage responseMessage = webClient.build()
+//                .get()
+//                .uri(urlWithQueryParam)
+//                .retrieve()
+//                .bodyToMono(ResponseMessage.class)
+//                .block();
+//        if (!responseMessage.isResult()) {
+//            return new ResponseMessage("해당 업무는 존재하지 않습니다.", false, getTaskRequestDto.getTaskId());
+//        }
+//        return new ResponseMessage("업무 조회 완료", true, responseMessage.getValue());
+//    }
     //해당 업무를 삭제합니다.
+    @Operation(summary = "업무를 삭제하기 위한 API", description = "HOST = 150.136.153.235:30080 <br>" +
+            "ValidationDetails : DeleteTaskRequestDto")
     @DeleteMapping("/user/api/task")
     public ResponseMessage deleteTask(@RequestBody @Valid DeleteTaskRequestDto deleteTaskRequestDto) {
         return kafkaTaskProducerService.sendDeleteTaskEvent(deleteTaskRequestDto);
     }
+    @Operation(summary = "업무를 수정하기 위한 API", description = "HOST = 150.136.153.235:30080")
     @PutMapping("/user/api/task")
     public ResponseMessage updateTask(@RequestBody @Valid UpdateTaskRequestDto updateTaskRequestDto) {
         //업무 업데이트 이벤트 생성 로직 추가
         return kafkaTaskProducerService.sendUpdateTaskEvent(updateTaskRequestDto);
     }
-    @Operation(summary = "업무의 담당자들을 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")
-    @GetMapping("/project/task/api/v1/users")
-    public void getMemberFromTask(@RequestBody @Valid GetMemberFromTaskRequestDto getMemberFromTaskRequestDto) {
-    }
+
 }

@@ -160,7 +160,8 @@ public class MemberService {
      * @param projectId
      * @return
      */
-    public List<Long> getMemberIdsByProjectId(Long projectId) {
-        return memberRepository.findMemberIdsByProjectId(projectId);
+    public ResponseMessage getMemberIdsByProjectId(Long projectId) {
+        return new ResponseMessage("멤버 ID 조회 완료", true, memberRepository.findMemberIdsByProjectId(projectId));
     }
+
 }
