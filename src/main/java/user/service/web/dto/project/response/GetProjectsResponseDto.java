@@ -14,14 +14,4 @@ public class GetProjectsResponseDto {
     private String description;
     private String startDate;
     private String endDate;
-    @Schema(description = "user entity의 id를 반환")
-    private List<Long> memberIds = new ArrayList<>();
-    public GetProjectsResponseDto(Long projectId, String title, String description, String startDate, String endDate, List<Long> memberIds) {
-        this.projectId = projectId;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.memberIds = memberIds;
-    }
 }

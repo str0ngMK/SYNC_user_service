@@ -17,23 +17,20 @@ public class UserController {
 	private final UserService userService;
 	//.requestMatchers("/user").hasAnyAuthority("USER") USER 계정 로그인 필요
 	@GetMapping("info")
-	public ResponseEntity<ResponseMessage> getUserInfo(){
+	public ResponseEntity<ResponseMessage> getCurrentUserInfo(){
 		return ResponseEntity.ok().body(userService.getUserInfo());
 	}
-	
 	@PutMapping("pwd")
 	public ResponseEntity<ResponseMessage> modifyPwd(@Valid @RequestBody ModifyPwdRequestDto body){
 		String userId = userService.getCurrentUserId();
 		UserDetails userDetails = userService.loadUserByUsername(userId);
 		return ResponseEntity.ok().body(userService.modifyPwd(body, userDetails));
 	}
-	
 	@PutMapping("Info")
 	public ResponseEntity<ResponseMessage> modifyUserInfo(@RequestBody @Valid ModifyUserInfoRequestDto body) {
 		String userId = userService.getCurrentUserId();
 		return ResponseEntity.ok().body(userService.modifyUserInfo(body, userId));
 	}
-	
 //	@ResponseBody
 //	@DeleteMapping("remove")
 //	public ResponseEntity<ResponseMessage> removeUser() {
