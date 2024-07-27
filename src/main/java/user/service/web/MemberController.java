@@ -10,7 +10,10 @@ import user.service.global.advice.ResponseMessage;
 import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
+import user.service.web.dto.project.response.GetUserIdsByProjectsResponseDto;
 import user.service.web.dto.task.request.GetMemberFromTaskRequestDto;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +38,7 @@ public class MemberController {
     }
     @Operation(summary = "프로젝트의 멤버들을 가져오기 위한 API", description = "HOST = 150.136.153.235:30080")
     @GetMapping("/api/v1/users")
-    public ResponseMessage getUsersFromProject(@RequestParam Long projectId) {
-        return memberService.getMemberIdsByProjectId(projectId);
+    public List<GetUserIdsByProjectsResponseDto> getUsersFromProject(@RequestParam List<Long> projectIds) {
+        return memberService.getUsersFromProjects(projectIds);
     }
 }

@@ -15,6 +15,8 @@ import user.service.global.exception.EntityNotFoundException;
 import user.service.global.exception.MemberDuplicateInProjectException;
 import user.service.repository.MemberRepository;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
+import user.service.web.dto.project.response.GetUserIdsByProjectsResponseDto;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -157,11 +159,16 @@ public class MemberService {
     }
     /**
      * 프로젝트에 속한 멤버 ID를 조회합니다.
-     * @param projectId
+     * @param projectIds
      * @return
      */
-    public ResponseMessage getMemberIdsByProjectId(Long projectId) {
-        return new ResponseMessage("멤버 ID 조회 완료", true, memberRepository.findMemberIdsByProjectId(projectId));
+    public List<GetUserIdsByProjectsResponseDto> getUsersFromProjects(List<Long> projectIds) {
+        return projectIds.stream()
+                .map(projectId -> {
+                    List<Long> userIds = memberRepository.findMemberIdsByProjectId(projectId);
+                    return new GetUserIdsByProjectsResponseDto(projectId, userIds);
+                })
+                .collect(Collectors.toList());
     }
 
 }
