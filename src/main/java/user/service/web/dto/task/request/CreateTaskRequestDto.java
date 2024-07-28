@@ -14,10 +14,8 @@ import java.util.Optional;
 public class CreateTaskRequestDto {
     @Schema(description = "업무 내용")
     private String description;
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
     @Schema(description = "업무 종료일")
     private Date endDate;
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
     @Schema(description = "업무 시작일")
     private Date startDate;
     @NotBlank(message = "상태는 필수 입력 값 입니다.")
