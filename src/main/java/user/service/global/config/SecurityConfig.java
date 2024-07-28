@@ -11,9 +11,7 @@ import org.springframework.security.authorization.AuthorizationEventPublisher;
 import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,11 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import user.service.OAuth2UserSerivce;
 import user.service.jwt.filter.JWTFilter;
 import user.service.jwt.filter.LoginFilter;
 import user.service.jwt.util.JWTUtil;
-import user.service.oauth2.SuccessHandler;
+
 import java.util.Collections;
 import java.util.List;
 @Configuration
@@ -36,8 +33,6 @@ public class SecurityConfig {
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final OAuth2UserSerivce oauth2UserSerivce;
-    private final SuccessHandler successHandler;
     private final JWTUtil jwtUtil;
 
     @Autowired
@@ -76,13 +71,6 @@ public class SecurityConfig {
         //http basic 인증 방식 disable
         http
                 .httpBasic(AbstractHttpConfigurer::disable);
-        //OAuth2
-        http
-                .oauth2Login((oauth2) -> oauth2
-                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                                    .userService(oauth2UserSerivce))
-                        .successHandler(successHandler)
-                );
         //경로별 인가 작업
         http
                 .authorizeHttpRequests(auth -> auth
@@ -94,9 +82,6 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
 
                 );
-
-
-
         //session 설정
         http
                 .sessionManagement(session -> session
