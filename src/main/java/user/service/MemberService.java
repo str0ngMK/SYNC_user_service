@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.exception.InvalidValueException;
+import user.service.kafka.member.KafkaMemberProducerService;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.entity.Member;
 import user.service.entity.User;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final UserService userService;
-    private final WebClient.Builder webClient;
+    private final KafkaMemberProducerService kafkaMemberProducerService;
     /**
      * 프로젝트에 멤버를 추가합니다.
      * @param memberMappingToProjectRequestDto
@@ -36,42 +37,6 @@ public class MemberService {
      */
     @Transactional(rollbackFor = { Exception.class })
     public SuccessResponse memberAddToProject(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
-        List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
-        Long projectId = memberMappingToProjectRequestDto.getProjectId();
-        int isManager = memberMappingToProjectRequestDto.getIsManager();
-//        //http://localhost:8070/project/api/v1/find
-//        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
-//        String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
-//                .queryParam("projectId", projectId)
-//                .toUriString();
-//        SuccessResponse responseMessage = webClient.build()
-//                .post()
-//                .uri(urlWithQueryParam)
-//                .retrieve()
-//                .bodyToMono(SuccessResponse.class)
-//                .block();
-//        // 프로젝트 존재 여부 확인
-//        if (!responseMessage.isResult()) {
-//            return new SuccessResponse("프로젝트가 존재하지 않습니다.", false, memberMappingToProjectRequestDto.getProjectId());
-//        }
-        //프로젝트 존재하지 않을시 보상 트랜잭션
-        userIds.forEach(userId -> {
-            try {
-                User user = userService.findUserEntity(userId);
-                Member member = Member.builder()
-                        .isManager(isManager)
-                        .projectId(projectId)
-                        .user(user)
-                        .build();
-                memberRepository.save(member);
-            } catch (DataIntegrityViolationException e) {
-                throw new MemberDuplicateInProjectException(e.getMessage());
-            }
-        });
-        return new SuccessResponse("멤버 추가 성공", true, userIds);
-    }
-    @Transactional(rollbackFor = { Exception.class })
-    public SuccessResponse memberAddToProjectNotValidEntity(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         int isManager = memberMappingToProjectRequestDto.getIsManager();
@@ -89,6 +54,8 @@ public class MemberService {
                 throw new MemberDuplicateInProjectException(e.getMessage());
             }
         });
+        //프로젝트 존재하지 않을시 보상 트랜잭션 처리
+        kafkaMemberProducerService.isExistProjectByMemberAddToProject(projectId, userIds);
         return new SuccessResponse("멤버 추가 성공", true, userIds);
     }
     /**
