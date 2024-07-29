@@ -82,6 +82,6 @@ public class KafkaTaskProducerService {
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC3, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
-        return new SuccessResponse("업무 삭제 이벤트 생성", true, updateTaskRequestDto);
+        return new SuccessResponse("업무 수정 이벤트 생성", true, updateTaskRequestDto);
     }
 }

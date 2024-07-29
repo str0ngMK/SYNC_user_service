@@ -39,22 +39,22 @@ public class MemberService {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         int isManager = memberMappingToProjectRequestDto.getIsManager();
-        //http://localhost:8070/project/api/v1/find
-        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
-        String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam("projectId", projectId)
-                .toUriString();
-        SuccessResponse responseMessage = webClient.build()
-                .post()
-                .uri(urlWithQueryParam)
-                .retrieve()
-                .bodyToMono(SuccessResponse.class)
-                .block();
-        // 프로젝트 존재 여부 확인
-        if (!responseMessage.isResult()) {
-            return new SuccessResponse("프로젝트가 존재하지 않습니다.", false, memberMappingToProjectRequestDto.getProjectId());
-        }
-
+//        //http://localhost:8070/project/api/v1/find
+//        String baseUrl = "http://129.213.161.199:31585/project/api/v1/find";
+//        String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
+//                .queryParam("projectId", projectId)
+//                .toUriString();
+//        SuccessResponse responseMessage = webClient.build()
+//                .post()
+//                .uri(urlWithQueryParam)
+//                .retrieve()
+//                .bodyToMono(SuccessResponse.class)
+//                .block();
+//        // 프로젝트 존재 여부 확인
+//        if (!responseMessage.isResult()) {
+//            return new SuccessResponse("프로젝트가 존재하지 않습니다.", false, memberMappingToProjectRequestDto.getProjectId());
+//        }
+        //프로젝트 존재하지 않을시 보상 트랜잭션
         userIds.forEach(userId -> {
             try {
                 User user = userService.findUserEntity(userId);
