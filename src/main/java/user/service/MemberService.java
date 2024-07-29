@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import user.service.global.exception.InvalidValueException;
 import user.service.kafka.member.KafkaMemberProducerService;
+import user.service.kafka.member.event.RollbackMemberAddToProjectEvent;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.entity.Member;
 import user.service.entity.User;
@@ -138,4 +139,13 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    public void rollbackMemberAddToProject(RollbackMemberAddToProjectEvent event) {
+        List<String> userIds = event.getUserIds();
+        Long projectId = event.getProjectId();
+        userIds.forEach(userId -> {
+            Member member = memberRepository.findMemberByUserIdAndProjectId(userService.getUserEntityId(userId), projectId)
+                    .orElseThrow(() -> new EntityNotFoundException("Member not found with UserId: " + userId + " and ProjectId: " + projectId));
+            memberRepository.delete(member);
+        });
+    }
 }
