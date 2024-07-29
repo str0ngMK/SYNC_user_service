@@ -1,14 +1,16 @@
 package user.service.kafka.task;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import user.service.MemberService;
 import user.service.UserService;
 import user.service.entity.User;
-import user.service.global.advice.ResponseMessage;
+import user.service.global.advice.SuccessResponse;
 import user.service.kafka.task.event.TaskCreateEvent;
 import user.service.kafka.task.event.TaskDeleteEvent;
 import user.service.kafka.task.event.TaskUpdateEvent;
@@ -17,8 +19,6 @@ import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 import user.service.web.dto.task.request.CreateTaskRequestDto;
 import user.service.web.dto.task.request.DeleteTaskRequestDto;
 import user.service.web.dto.task.request.UpdateTaskRequestDto;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class KafkaTaskProducerService {
      * @param createTaskRequestDto
      * @return
      */
-    public ResponseMessage sendCreateTaskEvent(CreateTaskRequestDto createTaskRequestDto) {
+    public SuccessResponse sendCreateTaskEvent(CreateTaskRequestDto createTaskRequestDto) {
         User user = userService.findUserEntity(userService.getCurrentUserId());
         // 프로젝트의 멤버인지 확인
         memberService.findMemberByUserIdAndProjectId(user.getId(), createTaskRequestDto.getProjectId());
@@ -43,28 +43,28 @@ public class KafkaTaskProducerService {
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
-        return new ResponseMessage("업무 생성 이벤트 생성", true, createTaskRequestDto);
+        return new SuccessResponse("업무 생성 이벤트 생성", true, createTaskRequestDto);
     }
     /**
      * 업무 담당자 배정 이벤트 생성
      * @param memberMappingToTaskRequestDto
      * @return
      */
-    public ResponseMessage sendAddUserToTaskEvent(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
-        ResponseMessage responseMessage = memberService.allMembersInSameProject(memberMappingToTaskRequestDto);
+    public SuccessResponse sendAddUserToTaskEvent(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+        SuccessResponse responseMessage = memberService.allMembersInSameProject(memberMappingToTaskRequestDto);
         if(responseMessage.isResult()){
             @SuppressWarnings("unchecked")
-            List<Long> userIds = (List<Long>) responseMessage.getValue();
+            List<Long> userIds = (List<Long>) responseMessage.getData();
             UserAddToTaskEvent event = new UserAddToTaskEvent(userIds, memberMappingToTaskRequestDto.getTaskId());
             ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC1, event);
             record.headers().remove("spring.json.header.types");
             kafkaTemplate.send(record);
-            return new ResponseMessage("업무 담당자 배정 이벤트 생성", true, memberMappingToTaskRequestDto);
+            return new SuccessResponse("업무 담당자 배정 이벤트 생성", true, memberMappingToTaskRequestDto);
         }else{
-            return new ResponseMessage(responseMessage.getMessage(), false, responseMessage.getValue());
+            return new SuccessResponse(responseMessage.getMessage(), false, responseMessage.getData());
         }
     }
-    public ResponseMessage sendDeleteTaskEvent(DeleteTaskRequestDto deleteTaskRequestDto) {
+    public SuccessResponse sendDeleteTaskEvent(DeleteTaskRequestDto deleteTaskRequestDto) {
         User user = userService.findUserEntity(userService.getCurrentUserId());
         // 프로젝트의 멤버인지 확인
         memberService.findMemberByUserIdAndProjectId(user.getId(), deleteTaskRequestDto.getProjectId());
@@ -72,16 +72,16 @@ public class KafkaTaskProducerService {
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC2, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
-        return new ResponseMessage("업무 삭제 이벤트 생성", true, deleteTaskRequestDto);
+        return new SuccessResponse("업무 삭제 이벤트 생성", true, deleteTaskRequestDto);
     }
 
-    public ResponseMessage sendUpdateTaskEvent(UpdateTaskRequestDto updateTaskRequestDto) {
+    public SuccessResponse sendUpdateTaskEvent(UpdateTaskRequestDto updateTaskRequestDto) {
         User user = userService.findUserEntity(userService.getCurrentUserId());
         memberService.findMemberByUserIdAndProjectId(user.getId(), updateTaskRequestDto.getProjectId());
         TaskUpdateEvent event = new TaskUpdateEvent(updateTaskRequestDto);
         ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC3, event);
         record.headers().remove("spring.json.header.types");
         kafkaTemplate.send(record);
-        return new ResponseMessage("업무 삭제 이벤트 생성", true, updateTaskRequestDto);
+        return new SuccessResponse("업무 삭제 이벤트 생성", true, updateTaskRequestDto);
     }
 }

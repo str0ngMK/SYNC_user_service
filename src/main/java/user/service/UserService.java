@@ -1,6 +1,9 @@
 package user.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,25 +14,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import user.service.global.exception.*;
-import user.service.web.dto.request.ModifyPwdRequestDto;
-import user.service.web.dto.request.ModifyUserInfoRequestDto;
-import user.service.web.dto.request.SignupRequestDto;
+
+import lombok.RequiredArgsConstructor;
 import user.service.entity.Authentication;
 import user.service.entity.InfoSet;
 import user.service.entity.Role;
 import user.service.entity.User;
 import user.service.global.advice.ErrorCode;
-import user.service.global.advice.ResponseMessage;
+import user.service.global.advice.SuccessResponse;
+import user.service.global.exception.AuthenticationFailureException;
+import user.service.global.exception.IdenticalValuesCannotChangedException;
+import user.service.global.exception.UnknownException;
+import user.service.global.exception.UserIdDuplicatedException;
+import user.service.global.exception.UserNotFoundException;
 import user.service.jwt.dto.AuthTokenDto;
 import user.service.jwt.dto.CustomUserDetails;
 import user.service.oauth2.CustomOAuth2User;
 import user.service.repository.AuthenticationRepository;
 import user.service.repository.UserRepository;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import user.service.web.dto.request.ModifyPwdRequestDto;
+import user.service.web.dto.request.ModifyUserInfoRequestDto;
+import user.service.web.dto.request.SignupRequestDto;
 
 @Service
 @RequiredArgsConstructor
@@ -55,14 +60,14 @@ public class UserService implements UserDetailsService {
 	 * @return
 	 */
 	@Transactional(rollbackFor = { Exception.class })
-	public ResponseMessage remove(String userId) {
+	public SuccessResponse remove(String userId) {
 		try {
 			Authentication authentication = authenticationRepository.findByUserId(userId);
 			authenticationRepository.delete(authentication);
 		} catch (Exception e) {
 			throw new UnknownException(e.getMessage());
 		}
-		return ResponseMessage.builder().message("success").build();
+		return SuccessResponse.builder().message("success").build();
 	}
 	/**
 	 * 사설 회원가입
@@ -129,7 +134,7 @@ public class UserService implements UserDetailsService {
 	 * 
 	 * @return
 	 */
-	public ResponseMessage getUserInfo() {
+	public SuccessResponse getUserInfo() {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			String id = getCurrentUserId();
@@ -142,7 +147,7 @@ public class UserService implements UserDetailsService {
 		} catch (Exception e) {
 			throw new UnknownException(e.getMessage());
 		}
-		return ResponseMessage.builder().value(map).build();
+		return SuccessResponse.builder().data(map).build();
 	}
 	
 	/**
@@ -152,7 +157,7 @@ public class UserService implements UserDetailsService {
 	 * @return
 	 */
 	@Transactional(rollbackFor = { Exception.class })
-	public ResponseMessage modifyUserInfo(ModifyUserInfoRequestDto body, String userId) {
+	public SuccessResponse modifyUserInfo(ModifyUserInfoRequestDto body, String userId) {
 		User user = userRepository.findByAuthenticationUserId(userId);
 		user = typeToSet(body, user);
 		try {
@@ -160,7 +165,7 @@ public class UserService implements UserDetailsService {
 		} catch (Exception e) {
 			throw new UnknownException(e.getMessage());
 		}
-		return ResponseMessage.builder().message("수정 되었습니다.").build();
+		return SuccessResponse.builder().message("수정 되었습니다.").build();
 	}
 
 	private User typeToSet(ModifyUserInfoRequestDto body, User user) {
@@ -198,8 +203,8 @@ public class UserService implements UserDetailsService {
 	 * @return
 	 */
 	@Transactional(rollbackFor = { Exception.class })
-	public ResponseMessage modifyPwd(ModifyPwdRequestDto body, UserDetails userDetails) {
-		ResponseMessage result = null;
+	public SuccessResponse modifyPwd(ModifyPwdRequestDto body, UserDetails userDetails) {
+		SuccessResponse result = null;
 		String encodedPassword = userDetails.getPassword();
 		boolean isCurrenPwdMatch = bCryptPasswordEncoder.matches(body.getCurrentPwd(), encodedPassword);
 		if (isCurrenPwdMatch) {
@@ -207,12 +212,12 @@ public class UserService implements UserDetailsService {
 				Authentication auth = authenticationRepository.findByUserId(userDetails.getUsername());
 				auth.setPassword(bCryptPasswordEncoder.encode(body.getNewPwd()));
 				authenticationRepository.saveAndFlush(auth);
-				result = ResponseMessage.builder().message("success").build();
+				result = SuccessResponse.builder().message("success").build();
 			} else {
-				result = ResponseMessage.builder().result(false).message("비밀번호가 일치 하지 않습니다.").build();
+				result = SuccessResponse.builder().result(false).message("비밀번호가 일치 하지 않습니다.").build();
 			}
 		} else {
-			result = ResponseMessage.builder().result(false).message("비밀번호를 확인 해 주세요.").build();
+			result = SuccessResponse.builder().result(false).message("비밀번호를 확인 해 주세요.").build();
 		}
 		return result;
 	}

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.service.MemberService;
-import user.service.global.advice.ResponseMessage;
+import user.service.global.advice.SuccessResponse;
 import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
@@ -23,13 +23,13 @@ public class MemberController {
     @Operation(summary = "프로젝트에 멤버를 추가하기 위한 API", description = "HOST = 150.136.153.235:30080 <br>" +
             "ValidationDetails : MemberMappingToProjectRequestDto")
     @PostMapping("user/api/member/project")
-    public ResponseMessage memberAddToProject(@RequestBody @Valid MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
+    public SuccessResponse memberAddToProject(@RequestBody @Valid MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         return memberService.memberAddToProject(memberMappingToProjectRequestDto);
     }
     @Operation(summary = "업무에 담당자를 추가하기 위한 API", description = "HOST = 150.136.153.235:30080 <br>" +
             "ValidationDetails : MemberMappingToTaskRequestDto")
     @PostMapping("user/api/member/task")
-    public ResponseMessage memberAddToTask(@RequestBody @Valid MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+    public SuccessResponse memberAddToTask(@RequestBody @Valid MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
     }
     @Operation(summary = "업무의 담당자들을 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")
