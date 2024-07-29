@@ -23,47 +23,47 @@ import user.service.web.dto.alarm.request.AlarmListRequestDto;
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
-	// kafka
-	private final KafkaTemplate<String, Object> kafkaTemplate;
-	private final KafkaAdmin kafkaAdmin;
-	private final KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory;
-
-	// repository
-	private final UserRepository userRepository;
-
-	// common
-	private final ObjectMapper objectMapper;
-	private final SimpMessagingTemplate messagingTemplate;
-
-	public void reqAlarmList(String loginId) {
-		AlarmListRequestDto dto = new AlarmListRequestDto();
-		User user = userRepository.findByAuthenticationUserId(loginId);
-		dto.setUserId(user.getId());
-
-		String mapper = null;
-		try {
-			mapper = objectMapper.writeValueAsString(dto);
-		} catch (Exception e) {
-			// Object mapper로 변환 불가능한 경우 처리
-		}
-		kafkaTemplate.send("reqAlarmList", mapper);
-	}
-
-	@KafkaListener(topics = "resAlarmList")
-	public void listen(String message, Acknowledgment acknowledgment) {
-		System.out.println("★ Kafka Listener 실행! ★ : " + message);
-
-		Map<String, Object> map = null;
-		try {
-			map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		messagingTemplate.convertAndSend("/response/" + map.get("userId"), message);
-
-		acknowledgment.acknowledge();
-	}
+//	// kafka
+//	private final KafkaTemplate<String, Object> kafkaTemplate;
+//	private final KafkaAdmin kafkaAdmin;
+//	private final KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory;
+//
+//	// repository
+//	private final UserRepository userRepository;
+//
+//	// common
+//	private final ObjectMapper objectMapper;
+//	private final SimpMessagingTemplate messagingTemplate;
+//
+//	public void reqAlarmList(String loginId) {
+//		AlarmListRequestDto dto = new AlarmListRequestDto();
+//		User user = userRepository.findByAuthenticationUserId(loginId);
+//		dto.setUserId(user.getId());
+//
+//		String mapper = null;
+//		try {
+//			mapper = objectMapper.writeValueAsString(dto);
+//		} catch (Exception e) {
+//			// Object mapper로 변환 불가능한 경우 처리
+//		}
+//		kafkaTemplate.send("reqAlarmList", mapper);
+//	}
+//
+//	@KafkaListener(topics = "resAlarmList")
+//	public void listen(String message, Acknowledgment acknowledgment) {
+//		System.out.println("★ Kafka Listener 실행! ★ : " + message);
+//
+//		Map<String, Object> map = null;
+//		try {
+//			map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {});
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		messagingTemplate.convertAndSend("/response/" + map.get("userId"), message);
+//
+//		acknowledgment.acknowledge();
+//	}
 
 
 //	public SseEmitter resAlarmList(String loginId) {

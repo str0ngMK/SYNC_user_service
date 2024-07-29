@@ -26,7 +26,7 @@ public class AlarmController {
 	@GetMapping("/list")
 	public void reqAlarmList() {
 		String loginId = userService.getCurrentUserId();
-		alarmService.reqAlarmList(loginId);
+//		alarmService.reqAlarmList(loginId);
 	}
 
 //	@GetMapping(value="/response/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
