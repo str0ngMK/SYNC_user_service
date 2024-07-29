@@ -25,7 +25,7 @@ public class KafkaMemberConsumerService {
                     .userIds(List.of(event.getUserId()))
                     .isManager(2)
                     .build();
-            memberService.memberAddToProjectNotValidEntity(memberMappingToProjectRequestDto);
+            memberService.memberAddToProject(memberMappingToProjectRequestDto);
             // 처리 로그 출력
             log.info("Processed AddMemberToProjectEvent");
         } catch (Exception e) {

@@ -74,7 +74,6 @@ public class KafkaTaskProducerService {
         kafkaTemplate.send(record);
         return new SuccessResponse("업무 삭제 이벤트 생성", true, deleteTaskRequestDto);
     }
-
     public SuccessResponse sendUpdateTaskEvent(UpdateTaskRequestDto updateTaskRequestDto) {
         User user = userService.findUserEntity(userService.getCurrentUserId());
         memberService.findMemberByUserIdAndProjectId(user.getId(), updateTaskRequestDto.getProjectId());
