@@ -15,14 +15,12 @@ import java.util.stream.Collectors;
 public class ErrorResponse {
 
     private String message;
-    private int status;
     private List<FieldError> errors;
     private String code;
     private boolean result;
 
     private ErrorResponse(final ErrorCode errorCode, final List<FieldError> errors) {
         this.message = errorCode.getMessage();
-        this.status = errorCode.getStatus();
         this.errors = errors;
         this.code = errorCode.getCode();
         this.result = false;
@@ -30,14 +28,12 @@ public class ErrorResponse {
 
     private ErrorResponse(final ErrorCode errorCode) {
         this.message = errorCode.getMessage();
-        this.status = errorCode.getStatus();
         this.code = errorCode.getCode();
         this.errors = new ArrayList<>();
         this.result = false;
     }
     private ErrorResponse(final ErrorCode errorCode, String message) {
         this.message = message;
-        this.status = errorCode.getStatus();
         this.code = errorCode.getCode();
         this.errors = new ArrayList<>();
         this.result = false;

@@ -16,7 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import user.service.global.advice.ErrorCode;
-import user.service.global.advice.ResponseMessage;
+import user.service.global.advice.SuccessResponse;
 import user.service.global.exception.AuthenticationFailureException;
 import user.service.jwt.dto.CustomUserDetails;
 import user.service.jwt.util.JWTUtil;
@@ -70,7 +70,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // ObjectMapper를 사용하여 JSON으로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(ResponseMessage.builder().message("success").build());
+        String jsonResponse = objectMapper.writeValueAsString(SuccessResponse.builder().message("success").build());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         // JSON 스트링을 response body에 작성

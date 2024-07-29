@@ -10,7 +10,7 @@ import user.service.global.exception.InvalidValueException;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.entity.Member;
 import user.service.entity.User;
-import user.service.global.advice.ResponseMessage;
+import user.service.global.advice.SuccessResponse;
 import user.service.global.exception.EntityNotFoundException;
 import user.service.global.exception.MemberDuplicateInProjectException;
 import user.service.repository.MemberRepository;
@@ -35,7 +35,7 @@ public class MemberService {
      * @return
      */
     @Transactional(rollbackFor = { Exception.class })
-    public ResponseMessage memberAddToProject(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
+    public SuccessResponse memberAddToProject(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         int isManager = memberMappingToProjectRequestDto.getIsManager();
@@ -44,15 +44,15 @@ public class MemberService {
         String urlWithQueryParam = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("projectId", projectId)
                 .toUriString();
-        ResponseMessage responseMessage = webClient.build()
+        SuccessResponse responseMessage = webClient.build()
                 .post()
                 .uri(urlWithQueryParam)
                 .retrieve()
-                .bodyToMono(ResponseMessage.class)
+                .bodyToMono(SuccessResponse.class)
                 .block();
         // 프로젝트 존재 여부 확인
         if (!responseMessage.isResult()) {
-            return new ResponseMessage("프로젝트가 존재하지 않습니다.", false, memberMappingToProjectRequestDto.getProjectId());
+            return new SuccessResponse("프로젝트가 존재하지 않습니다.", false, memberMappingToProjectRequestDto.getProjectId());
         }
 
         userIds.forEach(userId -> {
@@ -68,10 +68,10 @@ public class MemberService {
                 throw new MemberDuplicateInProjectException(e.getMessage());
             }
         });
-        return new ResponseMessage("멤버 추가 성공", true, userIds);
+        return new SuccessResponse("멤버 추가 성공", true, userIds);
     }
     @Transactional(rollbackFor = { Exception.class })
-    public ResponseMessage memberAddToProjectNotValidEntity(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
+    public SuccessResponse memberAddToProjectNotValidEntity(MemberMappingToProjectRequestDto memberMappingToProjectRequestDto) {
         List<String> userIds = memberMappingToProjectRequestDto.getUserIds();
         Long projectId = memberMappingToProjectRequestDto.getProjectId();
         int isManager = memberMappingToProjectRequestDto.getIsManager();
@@ -89,7 +89,7 @@ public class MemberService {
                 throw new MemberDuplicateInProjectException(e.getMessage());
             }
         });
-        return new ResponseMessage("멤버 추가 성공", true, userIds);
+        return new SuccessResponse("멤버 추가 성공", true, userIds);
     }
     /**
      * 프로젝트에 속한 멤버를 조회합니다.
@@ -119,7 +119,7 @@ public class MemberService {
      * @return
      */
     @Transactional(rollbackFor = { Exception.class })
-    public ResponseMessage allMembersInSameProject(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+    public SuccessResponse allMembersInSameProject(MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
         List<Long> memberIds = memberMappingToTaskRequestDto.getMemberIds();
         Set<Long> uniqueProjectIds = memberIds.stream()
                 .map(memberId -> memberRepository.findById(memberId)
@@ -132,10 +132,10 @@ public class MemberService {
             List<Long> userIds = memberIds.stream()
                     .map(memberId -> memberRepository.findById(memberId).get().getUser().getId())
                     .collect(Collectors.toList());
-            return new ResponseMessage("모든 멤버가 같은 프로젝트에 속해 있습니다.", true, userIds);
+            return new SuccessResponse("모든 멤버가 같은 프로젝트에 속해 있습니다.", true, userIds);
         } else {
             // 멤버들이 서로 다른 프로젝트에 속해 있을 경우
-            return new ResponseMessage("모든 멤버가 같은 프로젝트에 속해 있지 않습니다.", false, memberIds);
+            return new SuccessResponse("모든 멤버가 같은 프로젝트에 속해 있지 않습니다.", false, memberIds);
         }
     }
     /**
