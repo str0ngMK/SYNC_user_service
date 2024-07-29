@@ -20,10 +20,11 @@ public class MemberMappingToProjectRequestDto {
     private List<String> userIds;
     
     @Schema(description = "프로젝트 아이디, 해당 프로젝트가 존재하는지 확인하세요")
-    @NotEmpty(message = "프로젝트 아이디는 필수값입니다.")
+    @NotNull(message = "프로젝트 아이디는 필수값입니다.")
     private Long projectId;
     
     @Schema(description = "해당 유저의 관리자 지정 여부, " +
         "0: 일반 유저, 1: 관리자, 2: 프로젝트 생성자")
+    @NotNull(message = "관리자 지정 여부는 필수값입니다.")
     private int isManager;
 }

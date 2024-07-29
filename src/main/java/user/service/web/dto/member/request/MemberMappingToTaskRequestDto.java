@@ -3,6 +3,7 @@ package user.service.web.dto.member.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,6 @@ public class MemberMappingToTaskRequestDto {
     @NotEmpty(message = "멤버 아이디는 필수값입니다.")
     private List<Long> memberIds;
     @Schema(description = "업무 아이디")
-    @NotEmpty(message = "업무 아이디는 필수값입니다.")
+    @NotNull(message = "업무 아이디는 필수값입니다.")
     private Long taskId;
 }
