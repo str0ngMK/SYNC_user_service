@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.service.MemberService;
 import user.service.UserService;
-import user.service.entity.User;
 import user.service.web.dto.project.request.*;
 import user.service.global.advice.SuccessResponse;
 import user.service.kafka.project.KafkaProjectProducerService;
