@@ -3,7 +3,6 @@ package user.service.web;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.service.MemberService;
 import user.service.global.advice.SuccessResponse;
@@ -11,7 +10,6 @@ import user.service.kafka.task.KafkaTaskProducerService;
 import user.service.web.dto.member.request.MemberMappingToProjectRequestDto;
 import user.service.web.dto.member.request.MemberMappingToTaskRequestDto;
 import user.service.web.dto.project.response.GetUserIdsByProjectsResponseDto;
-import user.service.web.dto.task.request.GetMemberFromTaskRequestDto;
 
 import java.util.List;
 

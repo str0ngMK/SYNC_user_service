@@ -2,6 +2,7 @@ package user.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -26,7 +27,6 @@ public class AlarmService {
 //	// kafka
 //	private final KafkaTemplate<String, Object> kafkaTemplate;
 //	private final KafkaAdmin kafkaAdmin;
-//	private final KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory;
 //
 //	// repository
 //	private final UserRepository userRepository;

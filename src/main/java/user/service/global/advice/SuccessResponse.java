@@ -13,5 +13,5 @@ public class SuccessResponse {
 	@Builder.Default
 	private boolean result = true;
 	
-	private Object data;
+	private Object value;
 }
