@@ -12,8 +12,8 @@ public class SwaggerConfig {
 	@Bean
     public OpenAPI openAPI() {
         Info info = new Info()
-				.title("Hinc!")
-				.description("SNS 웹 사이트 Hinc!의 API입니다.")
+				.title("SYNC API")
+				.description("SYNC API Description")
 				.contact(new Contact()
 						.name("MinKyeong and HyunWoong")
 						.url("https://github.com/str0ngMK/Hinc_BE")
