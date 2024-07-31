@@ -147,7 +147,7 @@ public class UserService implements UserDetailsService {
 		} catch (Exception e) {
 			throw new UnknownException(e.getMessage());
 		}
-		return SuccessResponse.builder().data(map).build();
+		return SuccessResponse.builder().value(map).build();
 	}
 	
 	/**

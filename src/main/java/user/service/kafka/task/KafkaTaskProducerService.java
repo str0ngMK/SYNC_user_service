@@ -54,14 +54,14 @@ public class KafkaTaskProducerService {
         SuccessResponse responseMessage = memberService.allMembersInSameProject(memberMappingToTaskRequestDto);
         if(responseMessage.isResult()){
             @SuppressWarnings("unchecked")
-            List<Long> userIds = (List<Long>) responseMessage.getData();
+            List<Long> userIds = (List<Long>) responseMessage.getValue();
             UserAddToTaskEvent event = new UserAddToTaskEvent(userIds, memberMappingToTaskRequestDto.getTaskId());
             ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC1, event);
             record.headers().remove("spring.json.header.types");
             kafkaTemplate.send(record);
             return new SuccessResponse("업무 담당자 배정 이벤트 생성", true, memberMappingToTaskRequestDto);
         }else{
-            return new SuccessResponse(responseMessage.getMessage(), false, responseMessage.getData());
+            return new SuccessResponse(responseMessage.getMessage(), false, responseMessage.getValue());
         }
     }
     public SuccessResponse sendDeleteTaskEvent(DeleteTaskRequestDto deleteTaskRequestDto) {
