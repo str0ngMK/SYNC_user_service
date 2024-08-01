@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import jakarta.persistence.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -240,4 +241,16 @@ public class UserService implements UserDetailsService {
 		User user = userRepository.findByAuthenticationUserId(userId);
 		return user.getId();
 	}
+}
+@Entity
+public class Member{
+	@Id
+	private String id;
+	private String username;
+	private Integer age;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Team team;
+
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	private List<Order>
 }
