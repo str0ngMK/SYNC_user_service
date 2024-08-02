@@ -18,9 +18,10 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id",updatable = false)
+    @JoinColumn(name = "user_id",updatable = false, nullable = false)
     private User user;
-    @Column(name = "project_id")
+    @Column(name = "project_id", nullable = false)
     private Long projectId;
+    @Column(name = "is_manager", nullable = false)
     private int isManager;
 }
