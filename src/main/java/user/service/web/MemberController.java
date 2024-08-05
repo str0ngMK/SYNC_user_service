@@ -28,6 +28,7 @@ public class MemberController {
             "ValidationDetails : MemberMappingToTaskRequestDto")
     @PostMapping("user/api/member/task")
     public SuccessResponse memberAddToTask(@RequestBody @Valid MemberMappingToTaskRequestDto memberMappingToTaskRequestDto) {
+        //없는 task id인 경우 보상트랜잭션 필요
         return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
     }
     @Operation(summary = "업무의 담당자들을 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")

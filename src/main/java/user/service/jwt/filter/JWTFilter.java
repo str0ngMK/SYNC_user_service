@@ -90,9 +90,6 @@ public class JWTFilter extends OncePerRequestFilter {
                     .username(userId)
                     .role(role)
                     .build();
-
-
-
             if(Objects.equals(user.getInfoSet(), InfoSet.DEFAULT.toString())){
                 //UserDetails에 회원 정보 객체 담기
                 CustomUserDetails customUserDetails = new CustomUserDetails(user);
@@ -103,23 +100,16 @@ public class JWTFilter extends OncePerRequestFilter {
 
                 filterChain.doFilter(request, response);
             }else{
-
                 //UserDetails에 회원 정보 객체 담기
                 CustomOAuth2User customOAuth2User = new CustomOAuth2User(OAuth2user);
-
                 //스프링 시큐리티 인증 토큰 생성
                 Authentication authToken = new OAuth2AuthenticationToken(customOAuth2User, customOAuth2User.getAuthorities(), customOAuth2User.getInfoSet());
                 //세션에 사용자 등록
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-
                 filterChain.doFilter(request, response);
             }
         } catch (Exception e) {
             exceptionResolver.resolveException(request, response, null, e);
         }
-
-
-
-
     }
 }

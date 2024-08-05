@@ -18,6 +18,7 @@ public class UserController {
 	//.requestMatchers("/user").hasAnyAuthority("USER") USER 계정 로그인 필요
 	@GetMapping("info")
 	public ResponseEntity<SuccessResponse> getCurrentUserInfo(){
+		//여러 유저의 정보를 가져오도록 list로 바꿀것
 		return ResponseEntity.ok().body(userService.getUserInfo());
 	}
 	@PutMapping("pwd")
