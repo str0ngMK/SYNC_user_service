@@ -32,7 +32,7 @@ public class KafkaProjectProducerService {
     }
     public void sendDeleteProjectEvent(DeleteProjectRequestDto projectDeleteRequestDto, String userId) {
         ProjectDeleteEvent event = new ProjectDeleteEvent(projectDeleteRequestDto.getProjectId(), userId);
-        //프로젝트 관리자인지 확인
+        //프로젝트 생성자인지 확인
         memberService.isManager(
             //프로젝트 멤버인지 확인
             memberService.findMemberByUserIdAndProjectId(

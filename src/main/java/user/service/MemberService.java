@@ -78,7 +78,7 @@ public class MemberService {
     public void isManager(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         if (member.get().getIsManager() != 1 && member.get().getIsManager() != 2) {
-            throw new InvalidValueException("해당 멤버는 관리자가 아닙니다.");
+            throw new InvalidValueException("해당 멤버는 생성자가 아닙니다.");
         }
     }
     /**
@@ -134,6 +134,9 @@ public class MemberService {
         return projectIds.stream()
                 .map(projectId -> {
                     List<Long> userIds = memberRepository.findMemberIdsByProjectId(projectId);
+                    if (userIds.isEmpty()) {
+                        throw new EntityNotFoundException("No members found for ProjectId: " + projectId);
+                    }
                     return new GetUserIdsByProjectsResponseDto(projectId, userIds);
                 })
                 .collect(Collectors.toList());
