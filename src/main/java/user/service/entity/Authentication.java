@@ -19,7 +19,6 @@ public class Authentication extends BaseEntity {
     private String userId;
     private String password;
     private String email;
-    private Integer failCount;
     @Enumerated(EnumType.STRING)
     private InfoSet infoSet;
     @OneToOne(mappedBy = "authentication")
