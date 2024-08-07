@@ -31,6 +31,9 @@ public class MemberController {
         //없는 task id인 경우 보상트랜잭션 필요
         return kafkaTaskProducerService.sendAddUserToTaskEvent(memberMappingToTaskRequestDto);
     }
+    //멤버 삭제 api
+
+    //담당자 삭제 api
     @Operation(summary = "업무의 담당자들을 가져오기 위한 API", description = "HOST = 129.213.161.199:31585")
     @GetMapping("/project/task/api/v1/users")
     public void getUsersFromTask(@RequestParam Long taskId) {
